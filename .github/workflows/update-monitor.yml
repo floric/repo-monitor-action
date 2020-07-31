@@ -3,7 +3,7 @@ name: Update Monitor
 on: [push]
 
 jobs:
-  build:
+  UpdateMonitor:
     runs-on: ubuntu-latest
     steps:
-      - uses: floric/repo-monitor-action@latest
+      - uses: floric/repo-monitor-action@v0.0.1
