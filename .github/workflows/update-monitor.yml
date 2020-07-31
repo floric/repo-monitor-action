@@ -6,4 +6,4 @@ jobs:
   UpdateMonitor:
     runs-on: ubuntu-latest
     steps:
-      - uses: floric/repo-monitor-action@v0
+      - uses: floric/repo-monitor-action@v0.0.4
