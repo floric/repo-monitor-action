@@ -40,23 +40,37 @@ var core = require("@actions/core");
 var github = require("@actions/github");
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var token, octokit, allRepos, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var token, octokit, _a, owner, repo, path, res, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    _b.trys.push([0, 3, , 4]);
                     token = core.getInput("token");
                     octokit = github.getOctokit(token);
-                    return [4 /*yield*/, octokit.repos.listPublic()];
+                    _a = github.context.repo, owner = _a.owner, repo = _a.repo;
+                    path = "docs/index.html";
+                    return [4 /*yield*/, octokit.repos.getContent({
+                            owner: owner,
+                            repo: repo,
+                            path: path
+                        })];
                 case 1:
-                    allRepos = _a.sent();
-                    core.info(allRepos.data.map(function (n) { return n.name; }).reduce(function (a, b) { return a + ", " + b; }));
-                    return [3 /*break*/, 3];
+                    res = _b.sent();
+                    return [4 /*yield*/, octokit.repos.update({
+                            owner: owner,
+                            repo: repo,
+                            path: path,
+                            message: "Updated metrics",
+                            content: Buffer.from(res.data.content + "\n<!-- Something added !->").toString("base64")
+                        })];
                 case 2:
-                    error_1 = _a.sent();
+                    _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _b.sent();
                     core.setFailed(error_1.message);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
