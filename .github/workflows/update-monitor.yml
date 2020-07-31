@@ -1,6 +1,9 @@
 name: Update Monitor
 
-on: [tags]
+on:
+  create:
+    tags:
+      - v*
 
 jobs:
   UpdateMonitor:
