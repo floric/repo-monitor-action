@@ -7,3 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: floric/repo-monitor-action@v0.0.5
+        with:
+          key: bundle-size
+          value: 1
+          token: ${{ secrets.ACCESS_TOKEN }}
