@@ -79,9 +79,9 @@ function run() {
     });
 }
 function fromBase64(content) {
-    return new Buffer(content, "base64").toString("ascii");
+    return Buffer.from(content, "base64").toString("ascii");
 }
 function toBase64(content) {
-    return new Buffer(content).toString("base64");
+    return Buffer.from(content).toString("base64");
 }
 run();

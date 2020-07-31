@@ -9,7 +9,7 @@ jobs:
   UpdateMonitor:
     runs-on: ubuntu-latest
     steps:
-      - uses: floric/repo-monitor-action@v0.0.9
+      - uses: floric/repo-monitor-action@v0.0.10
         with:
           key: bundle-size
           value: 1
