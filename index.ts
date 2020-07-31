@@ -3,8 +3,6 @@ import * as github from "@actions/github";
 
 async function run() {
   try {
-    const key = core.getInput("key");
-    const value = core.getInput("value");
     const token = core.getInput("token");
     const octokit = github.getOctokit(token);
 
