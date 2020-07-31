@@ -10,18 +10,13 @@ async function run() {
         const octokit = github.getOctokit(token);
         const { owner, repo } = github.context.repo;
         const path = `docs/data/${key}.json`;
-        let res = await octokit.repos.getContent({
-            owner,
-            repo,
-            path,
-        });
+        let res = await getContent(path, token, owner, repo);
         let data = null;
-        const isUpdate = res.status == 200;
-        if (res.status == 404) {
-            core.info(`Found new key "${key}", will create new file.`);
+        if (!res) {
+            core.info(`Called with new key "${key}", will create new file.`);
             data = { key, type: "scalar", values: [] };
         }
-        else if (isUpdate) {
+        else if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
             core.info(`Extending existing metrics for "${key}"`);
             data = JSON.parse(fromBase64(res.data.content));
         }
@@ -33,18 +28,32 @@ async function run() {
             isoDate: new Date().toISOString(),
         });
         const content = toBase64(JSON.stringify(data));
-        const updateRes = await octokit.repos.createOrUpdateFileContents({
+        const isUpdate = (res === null || res === void 0 ? void 0 : res.status) == 200;
+        await octokit.repos.createOrUpdateFileContents({
             owner,
             repo,
             path,
             content,
-            sha: isUpdate ? res.data.sha : undefined,
+            sha: isUpdate ? res === null || res === void 0 ? void 0 : res.data.sha : undefined,
             message: isUpdate ? "Updated metrics" : "Created metrics",
         });
         core.info("Finished processing new metrics");
     }
     catch (error) {
         core.setFailed(error.message);
+    }
+}
+async function getContent(path, token, owner, repo) {
+    const octokit = github.getOctokit(token);
+    try {
+        return await octokit.repos.getContent({
+            owner,
+            repo,
+            path,
+        });
+    }
+    catch (err) {
+        return null;
     }
 }
 function fromBase64(content) {
