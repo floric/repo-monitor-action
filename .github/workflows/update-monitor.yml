@@ -1,0 +1,9 @@
+name: Update Monitor
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: floric/repo-monitor-action@latest
