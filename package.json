@@ -5,8 +5,12 @@
   "repository": "https://github.com/floric/repo-monitor-action.git",
   "author": "Florian Richter <floririchte@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc ./index.ts"
+  },
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "typescript": "^3.9.7"
   }
 }
