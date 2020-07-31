@@ -40,7 +40,7 @@ var core = require("@actions/core");
 var github = require("@actions/github");
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var token, octokit, _a, owner, repo, path, res, error_1;
+        var token, octokit, _a, owner, repo, path, res, decodedContent, content, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -56,14 +56,15 @@ function run() {
                         })];
                 case 1:
                     res = _b.sent();
-                    core.info("Status: " + res.status);
+                    decodedContent = fromBase64(res.data.content);
+                    content = toBase64(decodedContent + " <!-- Just a comment -->");
                     return [4 /*yield*/, octokit.repos.createOrUpdateFileContents({
                             owner: owner,
                             repo: repo,
                             path: path,
+                            content: content,
                             sha: res.data.sha,
-                            message: "Updated metrics",
-                            content: Buffer.from(res.data.content + "\n<!-- Something added !->").toString("base64")
+                            message: "Updated metrics"
                         })];
                 case 2:
                     _b.sent();
@@ -76,5 +77,11 @@ function run() {
             }
         });
     });
+}
+function fromBase64(content) {
+    return new Buffer(content, "base64").toString("ascii");
+}
+function toBase64(content) {
+    return new Buffer(content).toString("base64");
 }
 run();

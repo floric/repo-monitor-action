@@ -14,21 +14,27 @@ async function run() {
       path,
     });
 
-    core.info(`Status: ${res.status}`);
+    const decodedContent = fromBase64(res.data.content);
+    const content = toBase64(`${decodedContent} <!-- Just a comment -->`);
 
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
+      content,
       sha: res.data.sha,
       message: "Updated metrics",
-      content: Buffer.from(
-        `${res.data.content}\n<!-- Something added !->`
-      ).toString("base64"),
     });
   } catch (error) {
     core.setFailed(error.message);
   }
 }
 
+function fromBase64(content: string) {
+  return new Buffer(content, "base64").toString("ascii");
+}
+
+function toBase64(content: string) {
+  return new Buffer(content).toString("base64");
+}
 run();
