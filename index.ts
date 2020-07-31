@@ -14,7 +14,9 @@ async function run() {
       path,
     });
 
-    await octokit.repos.update({
+    core.info(`Status: ${res.status}`);
+
+    await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,

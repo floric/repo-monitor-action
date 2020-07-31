@@ -56,7 +56,8 @@ function run() {
                         })];
                 case 1:
                     res = _b.sent();
-                    return [4 /*yield*/, octokit.repos.update({
+                    core.info("Status: " + res.status);
+                    return [4 /*yield*/, octokit.repos.createOrUpdateFileContents({
                             owner: owner,
                             repo: repo,
                             path: path,
