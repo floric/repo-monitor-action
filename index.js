@@ -61,6 +61,7 @@ function run() {
                             owner: owner,
                             repo: repo,
                             path: path,
+                            sha: res.data.sha,
                             message: "Updated metrics",
                             content: Buffer.from(res.data.content + "\n<!-- Something added !->").toString("base64")
                         })];

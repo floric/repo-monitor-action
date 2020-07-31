@@ -20,6 +20,7 @@ async function run() {
       owner,
       repo,
       path,
+      sha: res.data.sha,
       message: "Updated metrics",
       content: Buffer.from(
         `${res.data.content}\n<!-- Something added !->`
