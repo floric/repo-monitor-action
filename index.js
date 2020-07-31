@@ -3,7 +3,7 @@ const github = require("@actions/github");
 
 try {
   const key = core.getInput("key");
-  const key = core.getInput("value");
+  const value = core.getInput("value");
   const token = core.getInput("token");
   const octokit = github.getOctokit(token);
 
