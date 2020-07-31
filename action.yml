@@ -1,0 +1,10 @@
+name: "Repository Metrics Monitor"
+description: "Creates graphs of monitored values to display them using GitHub Pages."
+inputs:
+  key:
+    required: true
+  value:
+    required: true
+runs:
+  using: "node12"
+  main: "index.js"
