@@ -10,6 +10,7 @@ export async function getContent(
   const { token, owner, repo, branch } = context;
   try {
     const octokit = github.getOctokit(token);
+    core.info(`Searching in ${repo} from ${owner} on ${branch} - ${path}`);
     const res = await octokit.repos.getContent({
       owner,
       repo,

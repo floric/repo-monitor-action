@@ -9,7 +9,7 @@ async function runAction() {
         const value = core.getInput("value");
         const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
         const releaseId = await createRelease(context);
-        let { serializedData, existingSha } = await github_1.getContent(context, path);
+        const { serializedData, existingSha } = await github_1.getContent(context, path);
         let data;
         if (!serializedData) {
             core.info(`Called with new key "${key}", will create new file.`);
@@ -34,23 +34,24 @@ async function runAction() {
 }
 async function createRelease(context) {
     const now = new Date();
+    const year = now.getUTCFullYear();
     const release = {
         id: context.releaseId,
         timestamp: now.getTime(),
     };
-    const path = `data/releases/${now.getUTCFullYear()}/releases.json`;
-    let { existingSha, serializedData } = await github_1.getContent(context, path);
-    let year;
-    if (serializedData) {
-        year = JSON.parse(serializedData);
-        core.info(`Extending year ${year.year} with ${year.releases.length} existing releases`);
+    const path = `data/releases/${year}/releases.json`;
+    const { existingSha, serializedData } = await github_1.getContent(context, path);
+    let yearReleases;
+    if (!serializedData) {
+        core.info(`Creating year ${year} for new release`);
+        yearReleases = { releases: [], year };
     }
     else {
-        core.info(`Creating year ${now.getUTCFullYear()} for new release`);
-        year = { releases: [], year: now.getUTCFullYear() };
+        yearReleases = JSON.parse(serializedData);
+        core.info(`Extending year ${year} with ${yearReleases.releases.length} existing releases`);
     }
-    year.releases.push(release);
-    await github_1.createOrUpdateContent(context, path, JSON.stringify(year), existingSha);
+    yearReleases.releases.push(release);
+    await github_1.createOrUpdateContent(context, path, JSON.stringify(yearReleases), existingSha);
     core.info(`Saved release ${release.id}`);
     return release.id;
 }
