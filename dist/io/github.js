@@ -23,10 +23,14 @@ async function getContent(context, path) {
                 existingSha: res === null || res === void 0 ? void 0 : res.data.sha,
             };
         }
+        else {
+            core.warning(`Unexpected response code ${res === null || res === void 0 ? void 0 : res.status}`);
+        }
     }
     catch (err) {
-        return { existingSha: null, serializedData: null };
+        core.error(`Reading from ${path} on ${context.branch} failed: ${err.message}`);
     }
+    return { existingSha: null, serializedData: null };
 }
 exports.getContent = getContent;
 async function createOrUpdateContent(context, path, content, existingSha) {

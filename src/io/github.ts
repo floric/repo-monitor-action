@@ -23,10 +23,15 @@ export async function getContent(
         serializedData: fromBase64(res.data.content),
         existingSha: res?.data.sha,
       };
+    } else {
+      core.warning(`Unexpected response code ${res?.status}`);
     }
   } catch (err) {
-    return { existingSha: null, serializedData: null };
+    core.error(
+      `Reading from ${path} on ${context.branch} failed: ${err.message}`
+    );
   }
+  return { existingSha: null, serializedData: null };
 }
 
 export async function createOrUpdateContent(
