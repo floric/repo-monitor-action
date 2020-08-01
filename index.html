@@ -26,43 +26,120 @@
     <script>
       dayjs.extend(window.dayjs_plugin_relativeTime);
 
-      const displayReleases = async (url) => {
+      const displayAndSaveReleases = async (url) => {
         const res = await fetch(
           `https://floric.github.io/repo-monitor-action/data/releases/${new Date().getFullYear()}/releases.json`
         );
         const parsed = await res.json();
+        const sortedReleases = parsed.releases.sort(
+          (a, b) => b.timestamp - a.timestamp
+        );
+        const releasesMap = new Map();
+        sortedReleases.forEach((r, i) => {
+          releasesMap.set(r.id, sortedReleases.length - i);
+        });
         document.getElementById("header-year").innerText = `${parsed.year}`;
-        document.getElementById(
-          "tbl-releases-body"
-        ).innerHTML = parsed.releases.map(
-          (n, i) =>
-            `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
-              <td class="px-4 py-2">${i + 1}</td>
+        document.getElementById("tbl-releases-body").innerHTML = sortedReleases
+          .map(
+            (n, i) =>
+              `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
+              <td class="px-4 py-2">${sortedReleases.length - i}</td>
               <td class="px-4 py-2">${dayjs(n.timestamp).fromNow()}</td>
               <td class="px-4 py-2">${n.id}</td>
             </tr>`
+          )
+          .reduce((a, b) => a + b);
+
+        return releasesMap;
+      };
+      const displayCharts = async (releases) => {
+        const res = await fetch(
+          `https://floric.github.io/repo-monitor-action/data/values/${new Date().getFullYear()}/code-size.json`
         );
+        const parsed = await res.json();
+        const config = {
+          type: "line",
+          data: {
+            labels: parsed.values.map((n) => releases.get(n.releaseId) || "-"),
+            datasets: [
+              {
+                label: "My First dataset",
+                backgroundColor: "#2d3748",
+                borderColor: "#e2e8f0",
+                data: parsed.values.map((n) => n.value || 0),
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            tooltips: {
+              mode: "index",
+              intersect: false,
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true,
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: false,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Month",
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Value",
+                  },
+                },
+              ],
+            },
+          },
+        };
+
+        const ctx = document.getElementById("canvas").getContext("2d");
+        window.myLine = new Chart(ctx, config);
       };
 
-      displayReleases();
+      window.onload = async () => {
+        const releases = await displayAndSaveReleases();
+        await displayCharts(releases);
+      };
     </script>
   </head>
   <body class="bg-gray-100">
     <div class="flex m-4 justify-center">
       <div class="w-full max-w-6xl">
-        <h1 id="header-year" class="text-6xl mb-2">-</h1>
-        <h2 class="text-xl mb-2 font-bold">Releases</h2>
-        <ul id="releases"></ul>
-        <table class="table-auto w-full text-left">
-          <thead>
-            <tr class="bg-gray-800 text-gray-100">
-              <th class="px-4 py-2">#</th>
-              <th class="px-4 py-2">Date</th>
-              <th class="px-4 py-2">Commit</th>
-            </tr>
-          </thead>
-          <tbody id="tbl-releases-body"></tbody>
-        </table>
+        <div class="mb-4">
+          <h1 id="header-year" class="text-6xl mb-2">-</h1>
+          <h2 class="text-xl mb-2 font-bold">Releases</h2>
+          <ul id="releases"></ul>
+          <table class="table-auto w-full text-left">
+            <thead>
+              <tr class="bg-gray-800 text-gray-100">
+                <th class="px-4 py-2">#</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Commit</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-releases-body"></tbody>
+          </table>
+        </div>
+        <div class="mb-4">
+          <h2 class="text-xl mb-2 font-bold">Charts</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+            <div>
+              <canvas id="canvas"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
