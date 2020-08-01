@@ -1,6 +1,12 @@
 import * as core from "@actions/core";
-import { createOrUpdateContent, getContent, getContext } from "./io/github";
-import { MetricsData, Release, MetricsContext, ReleaseYear } from "./model";
+import {
+  createOrUpdateContent,
+  getContent,
+  getContext,
+  createRelease,
+} from "./io/github";
+import { MetricsData } from "./model";
+import { updateTemplate } from "./template/updater";
 
 async function runAction() {
   try {
@@ -32,44 +38,12 @@ async function runAction() {
 
     const content = JSON.stringify(data);
     await createOrUpdateContent(context, path, content, existingSha);
+    await updateTemplate(context);
 
     core.info("Finished processing new metrics");
   } catch (error) {
     core.setFailed(error.message);
   }
-}
-
-async function createRelease(context: MetricsContext) {
-  const now = new Date();
-  const year = now.getUTCFullYear();
-  const release: Release = {
-    id: context.releaseId,
-    timestamp: now.getTime(),
-  };
-  const path = `data/releases/${year}/releases.json`;
-  const { existingSha, serializedData } = await getContent(context, path);
-  let yearReleases: ReleaseYear;
-  if (!serializedData) {
-    core.info(`Creating year ${year} for new release`);
-    yearReleases = { releases: [], year };
-  } else {
-    yearReleases = JSON.parse(serializedData);
-    core.info(
-      `Extending year ${year} with ${yearReleases.releases.length} existing releases`
-    );
-  }
-  yearReleases.releases.push(release);
-
-  await createOrUpdateContent(
-    context,
-    path,
-    JSON.stringify(yearReleases),
-    existingSha
-  );
-
-  core.info(`Saved release ${release.id}`);
-
-  return release.id;
 }
 
 runAction();

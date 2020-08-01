@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require("@actions/core");
 const github_1 = require("./io/github");
+const updater_1 = require("./template/updater");
 async function runAction() {
     try {
         const context = github_1.getContext();
@@ -11,7 +12,7 @@ async function runAction() {
             throw new Error("Invalid arguments delivered");
         }
         const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
-        const releaseId = await createRelease(context);
+        const releaseId = await github_1.createRelease(context);
         const { serializedData, existingSha } = await github_1.getContent(context, path);
         let data;
         if (!serializedData) {
@@ -29,33 +30,11 @@ async function runAction() {
         });
         const content = JSON.stringify(data);
         await github_1.createOrUpdateContent(context, path, content, existingSha);
+        await updater_1.updateTemplate(context);
         core.info("Finished processing new metrics");
     }
     catch (error) {
         core.setFailed(error.message);
     }
-}
-async function createRelease(context) {
-    const now = new Date();
-    const year = now.getUTCFullYear();
-    const release = {
-        id: context.releaseId,
-        timestamp: now.getTime(),
-    };
-    const path = `data/releases/${year}/releases.json`;
-    const { existingSha, serializedData } = await github_1.getContent(context, path);
-    let yearReleases;
-    if (!serializedData) {
-        core.info(`Creating year ${year} for new release`);
-        yearReleases = { releases: [], year };
-    }
-    else {
-        yearReleases = JSON.parse(serializedData);
-        core.info(`Extending year ${year} with ${yearReleases.releases.length} existing releases`);
-    }
-    yearReleases.releases.push(release);
-    await github_1.createOrUpdateContent(context, path, JSON.stringify(yearReleases), existingSha);
-    core.info(`Saved release ${release.id}`);
-    return release.id;
 }
 runAction();
