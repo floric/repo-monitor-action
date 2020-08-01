@@ -10,6 +10,9 @@ async function updateTemplate(context) {
         encoding: "utf8",
         flag: "r",
     });
+    if (!template) {
+        throw new Error("No template found");
+    }
     if (serializedData !== template) {
         await github_1.createOrUpdateContent(context, "index.html", template, existingSha);
     }

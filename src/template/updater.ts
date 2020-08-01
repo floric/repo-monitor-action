@@ -13,6 +13,9 @@ export async function updateTemplate(context: MetricsContext) {
     encoding: "utf8",
     flag: "r",
   });
+  if (!template) {
+    throw new Error("No template found");
+  }
   if (serializedData !== template) {
     await createOrUpdateContent(context, "index.html", template, existingSha);
   } else {
