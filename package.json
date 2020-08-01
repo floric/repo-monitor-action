@@ -6,7 +6,8 @@
   "author": "Florian Richter <floririchte@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "release": "npx standard-version"
   },
   "dependencies": {
     "@actions/core": "^1.2.4",

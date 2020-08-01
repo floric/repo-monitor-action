@@ -46,6 +46,7 @@ async function run() {
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
+      branch: "gh-pages",
       path,
       content,
       sha: isUpdate ? res?.data.sha : undefined,
@@ -68,6 +69,7 @@ async function getContent(
     return await octokit.repos.getContent({
       owner,
       repo,
+      branch: "gh-pages",
       path,
     });
   } catch (err) {
