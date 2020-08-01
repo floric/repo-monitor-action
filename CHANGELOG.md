@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/floric/repo-monitor-action/compare/v1.3.0...v1.3.1) (2020-08-01)
+
+
+### Bug Fixes
+
+* Check template size ([8563067](https://github.com/floric/repo-monitor-action/commit/8563067fe2ceb6dc9884b0d919db5b9619235f82))
+
 ## [1.3.0](https://github.com/floric/repo-monitor-action/compare/v1.2.16...v1.3.0) (2020-08-01)
 
 
