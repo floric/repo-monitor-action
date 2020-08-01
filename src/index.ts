@@ -7,7 +7,7 @@ async function runAction() {
     const context = getContext();
     const key = core.getInput("key");
     const value = core.getInput("value");
-    if (!!key || Number.isNaN(Number.parseFloat(value))) {
+    if (!key || Number.isNaN(Number.parseFloat(value))) {
       throw new Error("Invalid arguments delivered");
     }
     const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
