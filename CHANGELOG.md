@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/floric/repo-monitor-action/compare/v1.2.16...v1.3.0) (2020-08-01)
+
+
+### Features
+
+* Added template updater ([cd5f20f](https://github.com/floric/repo-monitor-action/commit/cd5f20f7902463687223d01911aa91fe1fdf7935))
+
 ### [1.2.16](https://github.com/floric/repo-monitor-action/compare/v1.2.15...v1.2.16) (2020-08-01)
 
 
