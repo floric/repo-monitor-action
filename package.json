@@ -1,13 +1,14 @@
 {
   "name": "repo-monitor-action",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/floric/repo-monitor-action.git",
   "author": "Florian Richter <floririchte@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "release": "npx standard-version"
+    "release": "npx standard-version",
+    "commit": "git add . && npx git-cz --disable-emoji"
   },
   "dependencies": {
     "@actions/core": "^1.2.4",
