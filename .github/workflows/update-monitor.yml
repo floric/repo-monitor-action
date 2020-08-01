@@ -15,7 +15,7 @@ jobs:
         run: |
           SIZE=($(du -s dist/))
           echo "::set-output name=code_size::$SIZE"
-      - uses: floric/repo-monitor-action@v1.2.10
+      - uses: floric/repo-monitor-action@v1.2.11
         name: Update Report
         with:
           key: code-size
