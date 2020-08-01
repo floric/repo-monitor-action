@@ -9,6 +9,7 @@ jobs:
   UpdateMonitor:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2.3.1
       - name: Calculate lines of code
         run: |
           SIZE=($(du -s dist/))
