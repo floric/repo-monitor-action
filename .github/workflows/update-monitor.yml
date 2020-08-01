@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.1
-      - name: Calculate lines of code
+      - name: Calculate project metrics
+        id: projectmetrics
         run: |
           SIZE=($(du -s dist/))
           echo "::set-output name=code_size::$SIZE"
@@ -18,5 +19,5 @@ jobs:
         name: Update Report
         with:
           key: code-size
-          value: $OUTPUT_CODE_SIZE
+          value: ${{ steps.projectmetrics.outputs.code_size }}
           token: ${{ secrets.GITHUB_TOKEN }}
