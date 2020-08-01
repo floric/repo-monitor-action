@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://github.com/floric/repo-monitor-action/compare/v1.2.4...v1.2.5) (2020-08-01)
+
+
+### Bug Fixes
+
+* Fixed updating year ([952e68c](https://github.com/floric/repo-monitor-action/commit/952e68c89a2e33b85cf9656f071821bd6c803f32))
+
 ### [1.2.4](https://github.com/floric/repo-monitor-action/compare/v1.2.3...v1.2.4) (2020-08-01)
 
 ### [1.2.3](https://github.com/floric/repo-monitor-action/compare/v1.2.2...v1.2.3) (2020-08-01)
