@@ -7,6 +7,9 @@ async function runAction() {
         const context = github_1.getContext();
         const key = core.getInput("key");
         const value = core.getInput("value");
+        if (!!key || Number.isNaN(Number.parseFloat(value))) {
+            throw new Error("Invalid arguments delivered");
+        }
         const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
         const releaseId = await createRelease(context);
         const { serializedData, existingSha } = await github_1.getContent(context, path);
