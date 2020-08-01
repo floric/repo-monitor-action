@@ -14,7 +14,7 @@ jobs:
         run: |
           SIZE=($(du -s dist/))
           echo "::set-env name=CODE_SIZE::$SIZE"
-      - uses: floric/repo-monitor-action@v1.2.4
+      - uses: floric/repo-monitor-action@v1.2.5
         name: Update Report
         with:
           key: code-size
