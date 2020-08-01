@@ -47,8 +47,8 @@ async function createOrUpdateContent(context, path, content, existingSha) {
 }
 exports.createOrUpdateContent = createOrUpdateContent;
 function getContext() {
-    core.info(`Token: ${github.token}`);
     const token = core.getInput("token");
+    core.info(`Token: ${token}`);
     const { owner, repo } = github.context.repo;
     const { sha: releaseId } = github.context;
     const context = {
