@@ -1,62 +1,34 @@
 import * as core from "@actions/core";
-import * as github from "@actions/github";
-
-type MetricsValue<T> = {
-  value: T;
-  isoDate: string;
-};
-
-type MetricsData = {
-  key: string;
-  type: "scalar";
-  values: Array<MetricsValue<number>>;
-};
-
-type MetricsContext = {
-  token: string;
-  repo: string;
-  owner: string;
-  path: string;
-  branch: string;
-};
+import { createOrUpdateContent, getContent, getContext } from "./io/github";
+import { MetricsData, Release, MetricsContext, ReleaseYear } from "./model";
 
 async function runAction() {
   try {
+    const context = getContext();
     const key = core.getInput("key");
     const value = core.getInput("value");
-    const token = core.getInput("token");
-    const { owner, repo } = github.context.repo;
-    const context: MetricsContext = {
-      token,
-      owner,
-      repo,
-      path: `data/${key}.json`,
-      branch: "gh-pages",
-    };
+    const path = `/data/${key}.json`;
 
-    let res = await getContent(context);
-    let existingSha = null;
-    let data: MetricsData | null = null;
-    if (!res) {
+    const releaseId = await createRelease(context);
+
+    let { serializedData, existingSha } = await getContent(context, path);
+    let data: MetricsData;
+    if (!serializedData) {
       core.info(`Called with new key "${key}", will create new file.`);
       data = { key, type: "scalar", values: [] };
-    } else if (res?.status == 200) {
+    } else {
       core.info(`Extending existing metrics for "${key}"`);
-      data = JSON.parse(fromBase64(res.data.content));
-      existingSha = res?.data.sha;
-    }
-
-    if (data == null) {
-      throw new Error(`Loading or updating data for "${key}" has failed`);
+      data = JSON.parse(serializedData);
     }
 
     data.values.push({
       value: Number.parseFloat(value),
-      isoDate: new Date().toISOString(),
+      timestamp: new Date().getTime(),
+      releaseId,
     });
 
-    const content = toBase64(JSON.stringify(data));
-    await createOrUpdateContent(context, content, existingSha);
+    const content = JSON.stringify(data);
+    await createOrUpdateContent(context, path, content, existingSha);
 
     core.info("Finished processing new metrics");
   } catch (error) {
@@ -64,45 +36,31 @@ async function runAction() {
   }
 }
 
-async function getContent(context: MetricsContext) {
-  const { token, owner, repo, path, branch } = context;
-  const octokit = github.getOctokit(token);
-  try {
-    return await octokit.repos.getContent({
-      owner,
-      repo,
-      branch,
-      path,
-    });
-  } catch (err) {
-    return null;
+async function createRelease(context: MetricsContext) {
+  const now = new Date();
+  const release: Release = {
+    id: context.releaseId,
+    timestamp: now.getTime(),
+  };
+  const path = `/data/releases/${now.getUTCFullYear()}/releases.json`;
+  let { existingSha, serializedData } = await getContent(context, path);
+  let year: ReleaseYear;
+  if (serializedData) {
+    year = JSON.parse(serializedData);
+    core.info(
+      `Extending year ${year.year} with ${year.releases.length} existing releases`
+    );
+  } else {
+    core.info(`Creating new year ${now.getUTCFullYear()} for new release`);
+    year = { releases: [], year: now.getUTCFullYear() };
   }
-}
+  year.releases.push(release);
 
-async function createOrUpdateContent(
-  context: MetricsContext,
-  content: string,
-  existingSha: string | null
-) {
-  const { token, owner, repo, path, branch } = context;
-  const octokit = github.getOctokit(token);
-  await octokit.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    branch,
-    path,
-    content,
-    sha: existingSha || undefined,
-    message: existingSha ? "Updated metrics" : "Created metrics",
-  });
-}
+  await createOrUpdateContent(context, path, JSON.stringify(year), existingSha);
 
-function fromBase64(content: string) {
-  return Buffer.from(content, "base64").toString("ascii");
-}
+  core.info(`Saved release ${release.id}`);
 
-function toBase64(content: string) {
-  return Buffer.from(content).toString("base64");
+  return release.id;
 }
 
 runAction();
