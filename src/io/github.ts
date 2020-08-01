@@ -14,6 +14,7 @@ export async function getContent(
     const res = await octokit.repos.getContent({
       owner,
       repo,
+      ref: branch,
       branch,
       path,
     });

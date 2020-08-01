@@ -12,6 +12,7 @@ async function getContent(context, path) {
         const res = await octokit.repos.getContent({
             owner,
             repo,
+            ref: branch,
             branch,
             path,
         });
