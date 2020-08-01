@@ -7,7 +7,7 @@ async function runAction() {
         const context = github_1.getContext();
         const key = core.getInput("key");
         const value = core.getInput("value");
-        const path = `/data/${key}.json`;
+        const path = `data/${new Date().getUTCFullYear()}/${key}.json`;
         const releaseId = await createRelease(context);
         let { serializedData, existingSha } = await github_1.getContent(context, path);
         let data;
@@ -38,7 +38,7 @@ async function createRelease(context) {
         id: context.releaseId,
         timestamp: now.getTime(),
     };
-    const path = `/data/releases/${now.getUTCFullYear()}/releases.json`;
+    const path = `data/releases/${now.getUTCFullYear()}/releases.json`;
     let { existingSha, serializedData } = await github_1.getContent(context, path);
     let year;
     if (serializedData) {
