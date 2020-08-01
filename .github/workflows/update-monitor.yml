@@ -9,8 +9,13 @@ jobs:
   UpdateMonitor:
     runs-on: ubuntu-latest
     steps:
+      - name: Calculate lines of code
+        run: |
+          SIZE=($(du -s dist/))
+          echo "::set-env name=CODE_SIZE::$SIZE"
       - uses: floric/repo-monitor-action@v1.2.4
+        name: Update Report
         with:
-          key: bundle-size
-          value: 1
+          key: code-size
+          value: $CODE_SIZE
           token: ${{ secrets.ACCESS_TOKEN }}
