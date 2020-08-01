@@ -16,9 +16,7 @@ async function getContent(context, path) {
             branch,
             path,
         });
-        core.info(`Status: ${res.status}`);
         if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
-            core.info("Found existing file");
             return {
                 serializedData: encoding_1.fromBase64(res.data.content),
                 existingSha: res.data.sha,

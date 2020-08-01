@@ -18,9 +18,7 @@ export async function getContent(
       branch,
       path,
     });
-    core.info(`Status: ${res.status}`);
     if (res?.status == 200) {
-      core.info("Found existing file");
       return {
         serializedData: fromBase64(res.data.content),
         existingSha: res.data.sha,
