@@ -12,16 +12,30 @@ type MetricsData = {
   values: Array<MetricsValue<number>>;
 };
 
-async function run() {
+type MetricsContext = {
+  token: string;
+  repo: string;
+  owner: string;
+  path: string;
+  branch: string;
+};
+
+async function runAction() {
   try {
     const key = core.getInput("key");
     const value = core.getInput("value");
     const token = core.getInput("token");
-    const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
-    const path = `docs/data/${key}.json`;
+    const context: MetricsContext = {
+      token,
+      owner,
+      repo,
+      path: `data/${key}.json`,
+      branch: "gh-pages",
+    };
 
-    let res = await getContent(path, token, owner, repo);
+    let res = await getContent(context);
+    let existingSha = null;
     let data: MetricsData | null = null;
     if (!res) {
       core.info(`Called with new key "${key}", will create new file.`);
@@ -29,6 +43,7 @@ async function run() {
     } else if (res?.status == 200) {
       core.info(`Extending existing metrics for "${key}"`);
       data = JSON.parse(fromBase64(res.data.content));
+      existingSha = res?.data.sha;
     }
 
     if (data == null) {
@@ -41,40 +56,45 @@ async function run() {
     });
 
     const content = toBase64(JSON.stringify(data));
+    await createOrUpdateContent(context, content, existingSha);
 
-    const isUpdate = res?.status == 200;
-    await octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      branch: "gh-pages",
-      path,
-      content,
-      sha: isUpdate ? res?.data.sha : undefined,
-      message: isUpdate ? "Updated metrics" : "Created metrics",
-    });
     core.info("Finished processing new metrics");
   } catch (error) {
     core.setFailed(error.message);
   }
 }
 
-async function getContent(
-  path: string,
-  token: string,
-  owner: string,
-  repo: string
-) {
+async function getContent(context: MetricsContext) {
+  const { token, owner, repo, path, branch } = context;
   const octokit = github.getOctokit(token);
   try {
     return await octokit.repos.getContent({
       owner,
       repo,
-      branch: "gh-pages",
+      branch,
       path,
     });
   } catch (err) {
     return null;
   }
+}
+
+async function createOrUpdateContent(
+  context: MetricsContext,
+  content: string,
+  existingSha: string | null
+) {
+  const { token, owner, repo, path, branch } = context;
+  const octokit = github.getOctokit(token);
+  await octokit.repos.createOrUpdateFileContents({
+    owner,
+    repo,
+    branch,
+    path,
+    content,
+    sha: existingSha || undefined,
+    message: existingSha ? "Updated metrics" : "Created metrics",
+  });
 }
 
 function fromBase64(content: string) {
@@ -85,4 +105,4 @@ function toBase64(content: string) {
   return Buffer.from(content).toString("base64");
 }
 
-run();
+runAction();

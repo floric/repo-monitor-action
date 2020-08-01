@@ -2,15 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require("@actions/core");
 const github = require("@actions/github");
-async function run() {
+async function runAction() {
     try {
         const key = core.getInput("key");
         const value = core.getInput("value");
         const token = core.getInput("token");
-        const octokit = github.getOctokit(token);
         const { owner, repo } = github.context.repo;
-        const path = `docs/data/${key}.json`;
-        let res = await getContent(path, token, owner, repo);
+        const context = {
+            token,
+            owner,
+            repo,
+            path: `data/${key}.json`,
+            branch: "gh-pages",
+        };
+        let res = await getContent(context);
+        let existingSha = null;
         let data = null;
         if (!res) {
             core.info(`Called with new key "${key}", will create new file.`);
@@ -19,6 +25,7 @@ async function run() {
         else if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
             core.info(`Extending existing metrics for "${key}"`);
             data = JSON.parse(fromBase64(res.data.content));
+            existingSha = res === null || res === void 0 ? void 0 : res.data.sha;
         }
         if (data == null) {
             throw new Error(`Loading or updating data for "${key}" has failed`);
@@ -28,27 +35,21 @@ async function run() {
             isoDate: new Date().toISOString(),
         });
         const content = toBase64(JSON.stringify(data));
-        const isUpdate = (res === null || res === void 0 ? void 0 : res.status) == 200;
-        await octokit.repos.createOrUpdateFileContents({
-            owner,
-            repo,
-            path,
-            content,
-            sha: isUpdate ? res === null || res === void 0 ? void 0 : res.data.sha : undefined,
-            message: isUpdate ? "Updated metrics" : "Created metrics",
-        });
+        await createOrUpdateContent(context, content, existingSha);
         core.info("Finished processing new metrics");
     }
     catch (error) {
         core.setFailed(error.message);
     }
 }
-async function getContent(path, token, owner, repo) {
+async function getContent(context) {
+    const { token, owner, repo, path, branch } = context;
     const octokit = github.getOctokit(token);
     try {
         return await octokit.repos.getContent({
             owner,
             repo,
+            branch,
             path,
         });
     }
@@ -56,10 +57,23 @@ async function getContent(path, token, owner, repo) {
         return null;
     }
 }
+async function createOrUpdateContent(context, content, existingSha) {
+    const { token, owner, repo, path, branch } = context;
+    const octokit = github.getOctokit(token);
+    await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        branch,
+        path,
+        content,
+        sha: existingSha || undefined,
+        message: existingSha ? "Updated metrics" : "Created metrics",
+    });
+}
 function fromBase64(content) {
     return Buffer.from(content, "base64").toString("ascii");
 }
 function toBase64(content) {
     return Buffer.from(content).toString("base64");
 }
-run();
+runAction();
