@@ -7,7 +7,7 @@ async function runAction() {
     const context = getContext();
     const key = core.getInput("key");
     const value = core.getInput("value");
-    const path = `data/${new Date().getUTCFullYear()}/${key}.json`;
+    const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
 
     const releaseId = await createRelease(context);
 
