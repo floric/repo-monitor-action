@@ -46,7 +46,7 @@ async function createRelease(context) {
         core.info(`Extending year ${year.year} with ${year.releases.length} existing releases`);
     }
     else {
-        core.info(`Creating new year ${now.getUTCFullYear()} for new release`);
+        core.info(`Creating year ${now.getUTCFullYear()} for new release`);
         year = { releases: [], year: now.getUTCFullYear() };
     }
     year.releases.push(release);
