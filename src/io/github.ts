@@ -54,8 +54,8 @@ export async function createOrUpdateContent(
 }
 
 export function getContext() {
-  core.info(`Token: ${(github as any).token}`);
   const token = core.getInput("token");
+  core.info(`Token: ${token}`);
   const { owner, repo } = github.context.repo;
   const { sha: releaseId } = github.context;
   const context: MetricsContext = {
