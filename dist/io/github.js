@@ -8,13 +8,14 @@ async function getContent(context, path) {
     const { token, owner, repo, branch } = context;
     try {
         const octokit = github.getOctokit(token);
-        core.info(`Searching in ${repo} from ${owner} on ${branch} - ${path}`);
+        core.info(`Searching in ${repo} from ${owner} on ${branch} - $`);
         const res = await octokit.repos.getContent({
             owner,
             repo,
             branch,
             path,
         });
+        core.info(`Status: ${res.status}`);
         if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
             core.info("Found existing file");
             return {
@@ -48,7 +49,6 @@ async function createOrUpdateContent(context, path, content, existingSha) {
 exports.createOrUpdateContent = createOrUpdateContent;
 function getContext() {
     const token = core.getInput("token");
-    core.info(`Token: ${token}`);
     const { owner, repo } = github.context.repo;
     const { sha: releaseId } = github.context;
     const context = {
