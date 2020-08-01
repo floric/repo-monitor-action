@@ -13,10 +13,10 @@ jobs:
       - name: Calculate lines of code
         run: |
           SIZE=($(du -s dist/))
-          echo "::set-env name=CODE_SIZE::$SIZE"
+          echo "::set-output name=code_size::$SIZE"
       - uses: floric/repo-monitor-action@v1.2.9
         name: Update Report
         with:
           key: code-size
-          value: ${{ CODE_SIZE }}
-          token: ${{ secrets.ACCESS_TOKEN }}
+          value: $OUTPUT_CODE_SIZE
+          token: ${{ secrets.GITHUB_TOKEN }}
