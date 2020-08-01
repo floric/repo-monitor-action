@@ -7,7 +7,7 @@ async function runAction() {
     const context = getContext();
     const key = core.getInput("key");
     const value = core.getInput("value");
-    const path = `/data/values/${new Date().getUTCFullYear()}/${key}.json`;
+    const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
 
     const releaseId = await createRelease(context);
 
@@ -42,7 +42,7 @@ async function createRelease(context: MetricsContext) {
     id: context.releaseId,
     timestamp: now.getTime(),
   };
-  const path = `/data/releases/${now.getUTCFullYear()}/releases.json`;
+  const path = `data/releases/${now.getUTCFullYear()}/releases.json`;
   let { existingSha, serializedData } = await getContent(context, path);
   let year: ReleaseYear;
   if (serializedData) {

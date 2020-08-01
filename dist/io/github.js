@@ -6,21 +6,19 @@ const github = require("@actions/github");
 const encoding_1 = require("./encoding");
 async function getContent(context, path) {
     const { token, owner, repo, branch } = context;
-    const octokit = github.getOctokit(token);
     try {
+        const octokit = github.getOctokit(token);
         const res = await octokit.repos.getContent({
             owner,
             repo,
             branch,
             path,
         });
-        if (!res) {
-            return { existingSha: null, serializedData: null };
-        }
-        else if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
+        if ((res === null || res === void 0 ? void 0 : res.status) == 200) {
+            core.info("Found existing file");
             return {
                 serializedData: encoding_1.fromBase64(res.data.content),
-                existingSha: res === null || res === void 0 ? void 0 : res.data.sha,
+                existingSha: res.data.sha,
             };
         }
         else {

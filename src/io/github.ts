@@ -8,20 +8,19 @@ export async function getContent(
   path: string
 ): Promise<{ serializedData: string | null; existingSha: string | null }> {
   const { token, owner, repo, branch } = context;
-  const octokit = github.getOctokit(token);
   try {
+    const octokit = github.getOctokit(token);
     const res = await octokit.repos.getContent({
       owner,
       repo,
       branch,
       path,
     });
-    if (!res) {
-      return { existingSha: null, serializedData: null };
-    } else if (res?.status == 200) {
+    if (res?.status == 200) {
+      core.info("Found existing file");
       return {
         serializedData: fromBase64(res.data.content),
-        existingSha: res?.data.sha,
+        existingSha: res.data.sha,
       };
     } else {
       core.warning(`Unexpected response code ${res?.status}`);
