@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>Metrics</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/tailwindcss@1.6.0/dist/tailwind.min.css"
@@ -31,17 +33,24 @@
           `https://floric.github.io/repo-monitor-action/data/releases/${new Date().getFullYear()}/releases.json`
         );
         const parsed = await res.json();
+        const releasesMap = new Map();
+        parsed.releases
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .forEach((r, i) => {
+            releasesMap.set(r.id, parsed.releases.length - i);
+          });
         document.getElementById("header-year").innerText = `${parsed.year}`;
-        document.getElementById(
-          "tbl-releases-body"
-        ).innerHTML = parsed.releases.map(
-          (n, i) =>
-            `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
-              <td class="px-4 py-2">${i + 1}</td>
+        document.getElementById("tbl-releases-body").innerHTML = parsed.releases
+          .map(
+            (n, i) =>
+              `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
+              <td class="px-4 py-2">${releasesMap.get(n.id)}</td>
               <td class="px-4 py-2">${dayjs(n.timestamp).fromNow()}</td>
               <td class="px-4 py-2">${n.id}</td>
             </tr>`
-        );
+          )
+          .reduce((a, b) => a + b);
+        return releasesMap;
       };
 
       displayReleases();
@@ -51,18 +60,23 @@
     <div class="flex m-4 justify-center">
       <div class="w-full max-w-6xl">
         <h1 id="header-year" class="text-6xl mb-2">-</h1>
-        <h2 class="text-xl mb-2 font-bold">Releases</h2>
-        <ul id="releases"></ul>
-        <table class="table-auto w-full text-left">
-          <thead>
-            <tr class="bg-gray-800 text-gray-100">
-              <th class="px-4 py-2">#</th>
-              <th class="px-4 py-2">Date</th>
-              <th class="px-4 py-2">Commit</th>
-            </tr>
-          </thead>
-          <tbody id="tbl-releases-body"></tbody>
-        </table>
+        <div>
+          <h2 class="text-xl mb-2 mt-8 font-bold">Releases</h2>
+          <ul id="releases"></ul>
+          <table class="table-auto w-full text-left">
+            <thead>
+              <tr class="bg-gray-800 text-gray-100">
+                <th class="px-4 py-2">#</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Commit</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-releases-body"></tbody>
+          </table>
+        </div>
+        <div>
+          <h2 class="text-xl mb-2 mt-8 font-bold">Values</h2>
+        </div>
       </div>
     </div>
   </body>
