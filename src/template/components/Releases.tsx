@@ -25,7 +25,7 @@ export const Releases: React.FC<{
             <th className="px-4 py-2">Commit</th>
           </tr>
         </thead>
-        <tbody id="tbl-releases-body">
+        <tbody>
           {newestReleases.map((n, i) => (
             <tr
               key={`r-${i}`}
@@ -39,9 +39,9 @@ export const Releases: React.FC<{
         </tbody>
       </table>
       {MAX_ITEMS < year.releases.length ? (
-        <p>
-          Only last {MAX_ITEMS} items shown. This year contains{" "}
-          {year.releases.length} releases in total.
+        <p className="mt-4">
+          Only last {MAX_ITEMS} items shown, year has {year.releases.length}{" "}
+          releases so far.
         </p>
       ) : null}
     </div>

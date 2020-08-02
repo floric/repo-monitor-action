@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc --skipLibCheck",
     "build-dev": "tsc src/dev.ts --outDir dist --jsx react && node dist/dev.js > dist/index.html",
-    "open-dev": "firefox dist/index.html",
+    "open-dev": "firefox dist/index.html &",
     "release": "npx standard-version",
     "commit": "git add . && npx git-cz --disable-emoji"
   },
