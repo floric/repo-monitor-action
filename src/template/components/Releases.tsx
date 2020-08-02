@@ -1,13 +1,10 @@
 import * as React from "react";
 import * as dayjs from "dayjs";
-import * as relativeTimePlugin from "dayjs/plugin/relativeTime";
 
 import { SubHeader } from "./SubHeader";
 import { ReleaseYear } from "../../model";
 
-dayjs.extend(relativeTimePlugin);
-
-const MAX_ITEMS = 20;
+const MAX_ITEMS = 10;
 
 export const Releases: React.FC<{ year: ReleaseYear }> = ({ year }) => {
   const newestReleases = year.releases
@@ -29,7 +26,7 @@ export const Releases: React.FC<{ year: ReleaseYear }> = ({ year }) => {
           {newestReleases.map((n, i) => (
             <tr className={i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}>
               <td className="px-4 py-2">{year.releases.length - i}</td>
-              <td className="px-4 py-2">{dayjs(n.timestamp).fromNow()}</td>
+              <td className="px-4 py-2">{dayjs(n.timestamp).format("lll")}</td>
               <td className="px-4 py-2">{n.id}</td>
             </tr>
           ))}

@@ -28,18 +28,10 @@ export const generatePage = (
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/dayjs@1.8.31/plugin/relativeTime.js"
-      integrity="sha256-tMJ/JI74gvcd/JCL4zekEwHfyHfT2XKUd5GAZn6fJOU="
-      crossorigin="anonymous"
-    ></script>
-    <script
       src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
       integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI="
       crossorigin="anonymous"
     ></script>
-    <script>
-      dayjs.extend(window.dayjs_plugin_relativeTime);
-    </script>
   </head>
   <body>
     ${ReactDOM.renderToStaticMarkup(

@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as dayjs from "dayjs";
 
 export const Footer: React.FC<{ repo: string; owner: string }> = ({
   owner,
@@ -6,7 +7,7 @@ export const Footer: React.FC<{ repo: string; owner: string }> = ({
 }) => (
   <div>
     <p className="text-center">
-      Generated ${new Date().toLocaleString()} for ${owner}/${repo}
+      Generated {dayjs().format("lll")} for {owner}/{repo}
     </p>
   </div>
 );
