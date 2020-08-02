@@ -7,8 +7,9 @@ import { ReleaseYear, MetricsData } from "../model";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Releases } from "./components/Releases";
-import { Values } from "./components/Values";
+import { Metrics } from "./components/Metrics";
 import { Page } from "./components/layout/Page";
+import { generateLineChart } from "./visualizations/line";
 
 dayjs.extend(localizedFormat);
 
@@ -20,9 +21,7 @@ export const generatePage = async (
   const releasesMap = new Map<string, number>();
   releases.releases
     .sort((a, b) => b.timestamp - a.timestamp)
-    .forEach((r, i) => {
-      releasesMap.set(r.id, releases.releases.length - i);
-    });
+    .forEach((r, i) => releasesMap.set(r.id, releases.releases.length - i));
   const graphics = await generateGraphics(data, releasesMap);
   return `<!DOCTYPE html>
 <html>
@@ -42,7 +41,7 @@ export const generatePage = async (
       <Page>
         <Header year={releases} />
         <Releases year={releases} releasesMap={releasesMap} />
-        <Values graphics={graphics} />
+        <Metrics graphics={graphics} />
         <Footer {...repo} />
       </Page>
     )}
@@ -63,32 +62,8 @@ const renderImage = async (
   releasesMap: Map<string, number>
 ) => {
   const canvasRenderService = new CanvasRenderService(500, 500);
-  const displayedValues = data.values.sort((a, b) => a.timestamp - b.timestamp);
-  const buffer = await canvasRenderService.renderToBuffer({
-    type: "line",
-    data: {
-      labels: displayedValues.map((n) => releasesMap.get(n.releaseId) || "-"),
-      datasets: [
-        {
-          label: data.key,
-          data: displayedValues.map((n) => n.value),
-          backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-          borderColor: ["rgba(255, 99, 132, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-            },
-          },
-        ],
-      },
-    },
-  });
+  const buffer = await canvasRenderService.renderToBuffer(
+    generateLineChart(data, releasesMap)
+  );
   return buffer.toString("base64");
 };

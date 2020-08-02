@@ -6,7 +6,13 @@ import { getRandomInteger } from "./util/math";
 const generateRandomReleases = (count: number) => {
   const releases = new Array(count).fill(0).map((_, i) => ({
     id: `r-${count - i}`,
-    timestamp: dayjs().subtract(i, "day").toDate().getTime(),
+    timestamp: dayjs()
+      .subtract(i, "day")
+      .subtract(Math.random() * 12, "hour")
+      .subtract(Math.random() * 60, "minute")
+      .subtract(Math.random() * 60, "second")
+      .toDate()
+      .getTime(),
   }));
 
   return { year: 2020, releases };

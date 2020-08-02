@@ -40,8 +40,8 @@ export const Releases: React.FC<{
       </table>
       {MAX_ITEMS < year.releases.length ? (
         <p className="mt-4">
-          Only last {MAX_ITEMS} items shown, year has {year.releases.length}{" "}
-          releases so far.
+          Only last {MAX_ITEMS} releases displayed, year has{" "}
+          {year.releases.length} in total.
         </p>
       ) : null}
     </div>

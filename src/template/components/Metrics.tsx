@@ -27,11 +27,11 @@ const StatsLine: React.FC<{ name: string; value: number }> = ({
   </tr>
 );
 
-export const Values: React.FC<{
+export const Metrics: React.FC<{
   graphics: Array<{ data: MetricsData; img: string }>;
 }> = ({ graphics }) => (
   <div>
-    <SubHeader header="Values" />
+    <SubHeader header="Metrics" />
     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {graphics.map(({ data, img }) => {
         const plainValues = data.values.map((n) => n.value);
@@ -45,7 +45,7 @@ export const Values: React.FC<{
                 src={`data:image/png;base64, ${img}`}
                 alt={`Change of ${data.key} throughout the releases`}
               />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                 <StatsTable>
                   <StatsLine name="Max" value={calcMax(plainValues)} />
                   <StatsLine name="Min" value={calcMin(plainValues)} />
