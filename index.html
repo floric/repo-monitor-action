@@ -29,10 +29,7 @@
       dayjs.extend(window.dayjs_plugin_relativeTime);
 
       const displayReleases = async (url) => {
-        const res = await fetch(
-          `https://floric.github.io/repo-monitor-action/data/releases/${new Date().getFullYear()}/releases.json`
-        );
-        const parsed = await res.json();
+        const parsed = [object Object];
         const releasesMap = new Map();
         parsed.releases
           .sort((a, b) => b.timestamp - a.timestamp)
@@ -78,7 +75,7 @@
           <h2 class="text-xl mb-2 mt-8 font-bold">Values</h2>
         </div>
         <div>
-          <p class="text-center">Generated 8/2/2020, 10:02:08 AM</p>
+          <p class="text-center">Generated 8/2/2020, 10:11:17 AM for floric/repo-monitor-action</p>
         </div>
       </div>
     </div>
