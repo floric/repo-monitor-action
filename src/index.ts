@@ -38,7 +38,7 @@ async function runAction() {
 
     const content = JSON.stringify(data);
     await createOrUpdateContent(context, path, content, existingSha);
-    await updateTemplate(context, releaseYear);
+    await updateTemplate(context, releaseYear, [data]);
 
     core.info("Finished processing new metrics");
   } catch (error) {

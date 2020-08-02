@@ -6,7 +6,10 @@ import { ReleaseYear } from "../../model";
 
 const MAX_ITEMS = 10;
 
-export const Releases: React.FC<{ year: ReleaseYear }> = ({ year }) => {
+export const Releases: React.FC<{
+  year: ReleaseYear;
+  releasesMap: Map<string, number>;
+}> = ({ year, releasesMap }) => {
   const newestReleases = year.releases
     .sort((a, b) => b.timestamp - a.timestamp)
     .slice(0, MAX_ITEMS);
@@ -24,8 +27,11 @@ export const Releases: React.FC<{ year: ReleaseYear }> = ({ year }) => {
         </thead>
         <tbody id="tbl-releases-body">
           {newestReleases.map((n, i) => (
-            <tr className={i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}>
-              <td className="px-4 py-2">{year.releases.length - i}</td>
+            <tr
+              key={`r-${i}`}
+              className={i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}
+            >
+              <td className="px-4 py-2">{releasesMap.get(n.id)}</td>
               <td className="px-4 py-2">{dayjs(n.timestamp).format("lll")}</td>
               <td className="px-4 py-2">{n.id}</td>
             </tr>
@@ -33,7 +39,10 @@ export const Releases: React.FC<{ year: ReleaseYear }> = ({ year }) => {
         </tbody>
       </table>
       {MAX_ITEMS < year.releases.length ? (
-        <p>Only last {MAX_ITEMS} items shown.</p>
+        <p>
+          Only last {MAX_ITEMS} items shown. This year contains{" "}
+          {year.releases.length} releases in total.
+        </p>
       ) : null}
     </div>
   );
