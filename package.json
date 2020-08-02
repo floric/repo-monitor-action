@@ -1,6 +1,6 @@
 {
   "name": "repo-monitor-action",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "index.js",
   "repository": "https://github.com/floric/repo-monitor-action.git",
   "author": "Florian Richter <floririchte@gmail.com>",
