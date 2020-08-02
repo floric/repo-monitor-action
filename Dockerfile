@@ -14,7 +14,7 @@ RUN NODE_ENV=production yarn build
 FROM node:13-slim
 
 WORKDIR /home/node/app
+USER node
 COPY --from=builder /home/node/app .
 RUN chmod +x entrypoint.sh
-RUN ls -la
 ENTRYPOINT [ "./entrypoint.sh" ]
