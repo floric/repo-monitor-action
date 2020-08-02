@@ -13,6 +13,8 @@ jobs:
       - name: Calculate project metrics
         id: projectmetrics
         run: |
+          yarn
+          yarn build
           SIZE=($(du -s dist/))
           echo "::set-output name=code_size::$SIZE"
       - uses: floric/repo-monitor-action@v1.4.1
