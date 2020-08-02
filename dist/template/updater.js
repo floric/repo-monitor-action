@@ -2,22 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateTemplate = void 0;
 const core = require("@actions/core");
-const fs_1 = require("fs");
 const github_1 = require("../io/github");
+const page_1 = require("./page");
 async function updateTemplate(context) {
-    const { existingSha, serializedData } = await github_1.getContent(context, "index.html");
-    const template = fs_1.readFileSync("src/template/index.html", {
-        encoding: "utf8",
-        flag: "r",
-    });
-    if (!template) {
-        throw new Error("No template found");
-    }
-    if (serializedData !== template) {
-        await github_1.createOrUpdateContent(context, "index.html", template, existingSha);
-    }
-    else {
-        core.info("Skipped updating template");
-    }
+    const { existingSha } = await github_1.getContent(context, "index.html");
+    const template = page_1.generatePage();
+    core.info(`Generated page successfully`);
+    await github_1.createOrUpdateContent(context, "index.html", template, existingSha);
+    core.info(`Updated page successfully`);
 }
 exports.updateTemplate = updateTemplate;

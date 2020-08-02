@@ -7,11 +7,10 @@ export async function updateTemplate(context: MetricsContext) {
   const { existingSha } = await getContent(context, "index.html");
 
   const template = generatePage();
-  if (!template) {
-    throw new Error("No template found");
-  }
+
+  core.info(`Generated page successfully`);
 
   await createOrUpdateContent(context, "index.html", template, existingSha);
 
-  core.info(`Updated template successfully`);
+  core.info(`Updated page successfully`);
 }
