@@ -34,7 +34,7 @@ export const generatePage = (
       dayjs.extend(window.dayjs_plugin_relativeTime);
 
       const displayReleases = async (url) => {
-        const parsed = ${releases};
+        const parsed = ${JSON.stringify(releases)};
         const releasesMap = new Map();
         parsed.releases
           .sort((a, b) => b.timestamp - a.timestamp)
