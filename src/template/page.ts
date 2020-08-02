@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+export const generatePage = () => `<!DOCTYPE html>
 <html>
   <head>
     <title>Metrics</title>
@@ -30,7 +30,7 @@
 
       const displayReleases = async (url) => {
         const res = await fetch(
-          `https://floric.github.io/repo-monitor-action/data/releases/${new Date().getFullYear()}/releases.json`
+          \`https://floric.github.io/repo-monitor-action/data/releases/\${new Date().getFullYear()}/releases.json\`
         );
         const parsed = await res.json();
         const releasesMap = new Map();
@@ -39,15 +39,15 @@
           .forEach((r, i) => {
             releasesMap.set(r.id, parsed.releases.length - i);
           });
-        document.getElementById("header-year").innerText = `${parsed.year}`;
+        document.getElementById("header-year").innerText = \`\${parsed.year}\`;
         document.getElementById("tbl-releases-body").innerHTML = parsed.releases
           .map(
             (n, i) =>
-              `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
-              <td class="px-4 py-2">${releasesMap.get(n.id)}</td>
-              <td class="px-4 py-2">${dayjs(n.timestamp).fromNow()}</td>
-              <td class="px-4 py-2">${n.id}</td>
-            </tr>`
+            \`<tr class="\${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
+              <td class="px-4 py-2">\${releasesMap.get(n.id)}</td>
+              <td class="px-4 py-2">\${dayjs(n.timestamp).fromNow()}</td>
+              <td class="px-4 py-2">\${n.id}</td>
+            </tr>\`
           )
           .reduce((a, b) => a + b);
         return releasesMap;
@@ -56,7 +56,7 @@
       displayReleases();
     </script>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-100 text-gray-900">
     <div class="flex m-4 justify-center">
       <div class="w-full max-w-6xl">
         <h1 id="header-year" class="text-6xl mb-2">-</h1>
@@ -77,7 +77,10 @@
         <div>
           <h2 class="text-xl mb-2 mt-8 font-bold">Values</h2>
         </div>
+        <div>
+          <p class="text-center">Generated ${new Date().toLocaleString()}</p>
+        </div>
       </div>
     </div>
   </body>
-</html>
+</html>`;
