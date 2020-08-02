@@ -4,7 +4,7 @@ This Github action generates custom metrics reports including the last releases 
 
 The example for the project itself can found at:
 
-https://github.com/floric/repo-monitor-action
+https://floric.github.io/repo-monitor-action/
 
 ## Usage
 

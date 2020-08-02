@@ -12,9 +12,14 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "@types/react-dom": "^16.9.8",
+    "dayjs": "^1.8.31",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@types/react": "^16.9.44",
     "typescript": "^3.9.7"
   }
 }
