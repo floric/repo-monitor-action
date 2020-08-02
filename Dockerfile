@@ -1,4 +1,4 @@
-FROM node:13 as builder
+FROM node:12 as builder
 
 WORKDIR /home/node/app
 COPY package.json ./
@@ -11,7 +11,7 @@ RUN yarn
 COPY --chown=node:node . .
 RUN NODE_ENV=production yarn build
 
-FROM node:13-slim
+FROM node:12-slim
 
 WORKDIR /home/node/app
 USER node

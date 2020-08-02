@@ -17,7 +17,7 @@ jobs:
           yarn build
           SIZE=($(du -s dist/))
           echo "::set-output name=code_size::$SIZE"
-      - uses: floric/repo-monitor-action@v1.6.1
+      - uses: floric/repo-monitor-action@v1.6.2
         name: Update Report
         with:
           key: code-size
