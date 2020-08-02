@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/server";
+import * as Chart from "chart.js";
 import { CanvasRenderService } from "chartjs-node-canvas";
 import * as dayjs from "dayjs";
 import * as localizedFormat from "dayjs/plugin/localizedFormat";
@@ -12,6 +13,8 @@ import { Page } from "./components/layout/Page";
 import { generateLineChart } from "./visualizations/line";
 
 dayjs.extend(localizedFormat);
+
+Chart.defaults.global.defaultFontFamily = "sans-serif";
 
 export const generatePage = async (
   releases: ReleaseYear,
@@ -26,7 +29,7 @@ export const generatePage = async (
   return `<!DOCTYPE html>
 <html>
   <head>
-    <title>Metrics</title>
+    <title>${repo.owner}/${repo.repo} | Metrics</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -35,14 +38,20 @@ export const generatePage = async (
       integrity="sha256-Y4vGjLmrpriLD3X1h1YdyzE2icdiBsJHBXORYXlyDwM="
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"
+      integrity="sha256-HmKKK3VimMDCOGPTx1mp/5Iaip6BWMZy5HMhLc+4o9E="
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     ${ReactDOM.renderToStaticMarkup(
       <Page>
-        <Header year={releases} />
+        <Header year={releases} {...repo} />
         <Releases year={releases} releasesMap={releasesMap} />
         <Metrics graphics={graphics} />
-        <Footer {...repo} />
+        <Footer />
       </Page>
     )}
   </body>
@@ -61,7 +70,7 @@ const renderImage = async (
   data: MetricsData,
   releasesMap: Map<string, number>
 ) => {
-  const canvasRenderService = new CanvasRenderService(500, 500);
+  const canvasRenderService = new CanvasRenderService(300, 300);
   const buffer = await canvasRenderService.renderToBuffer(
     generateLineChart(data, releasesMap)
   );
