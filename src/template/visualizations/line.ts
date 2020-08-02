@@ -26,11 +26,14 @@ export const generateLineChart = (
       devicePixelRatio: 2,
       legend: { display: false },
       scales: {
+        xAxes: [
+          {
+            ticks: { fontFamily: "sans-serif" },
+          },
+        ],
         yAxes: [
           {
-            ticks: {
-              beginAtZero: true,
-            },
+            ticks: { fontFamily: "sans-serif" },
           },
         ],
       },

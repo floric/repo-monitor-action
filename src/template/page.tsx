@@ -14,8 +14,6 @@ import { generateLineChart } from "./visualizations/line";
 
 dayjs.extend(localizedFormat);
 
-Chart.defaults.global.defaultFontFamily = "sans-serif";
-
 export const generatePage = async (
   releases: ReleaseYear,
   data: Array<MetricsData>,
