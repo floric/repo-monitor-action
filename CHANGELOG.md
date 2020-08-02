@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/floric/repo-monitor-action/compare/v1.4.1...v1.5.0) (2020-08-02)
+
+
+### Features
+
+* Use react for generating apge ([1ced0ff](https://github.com/floric/repo-monitor-action/commit/1ced0ff5512d1631b998d3b2c708e2f69d74486d))
+
 ### [1.4.1](https://github.com/floric/repo-monitor-action/compare/v1.4.0...v1.4.1) (2020-08-02)
 
 
