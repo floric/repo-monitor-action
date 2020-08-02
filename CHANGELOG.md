@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.6](https://github.com/floric/repo-monitor-action/compare/v1.6.5...v1.6.6) (2020-08-02)
+
+
+### Bug Fixes
+
+* Use simpler docker setup ([ed96666](https://github.com/floric/repo-monitor-action/commit/ed96666175d311183365bdc973a28391b8dab54b))
+
 ### [1.6.5](https://github.com/floric/repo-monitor-action/compare/v1.6.4...v1.6.5) (2020-08-02)
 
 
