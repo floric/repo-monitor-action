@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createRelease = exports.getContext = exports.createOrUpdateContent = exports.getContent = void 0;
+exports.createOrUpdateRelease = exports.getContext = exports.createOrUpdateContent = exports.getContent = void 0;
 const core = require("@actions/core");
 const github = require("@actions/github");
 const encoding_1 = require("./encoding");
@@ -59,7 +59,7 @@ function getContext() {
     return context;
 }
 exports.getContext = getContext;
-async function createRelease(context) {
+async function createOrUpdateRelease(context) {
     const now = new Date();
     const year = now.getUTCFullYear();
     const release = {
@@ -68,18 +68,18 @@ async function createRelease(context) {
     };
     const path = `data/releases/${year}/releases.json`;
     const { existingSha, serializedData } = await getContent(context, path);
-    let yearReleases;
+    let releaseYear;
     if (!serializedData) {
         core.info(`Creating year ${year} for new release`);
-        yearReleases = { releases: [], year };
+        releaseYear = { releases: [], year };
     }
     else {
-        yearReleases = JSON.parse(serializedData);
-        core.info(`Extending year ${year} with ${yearReleases.releases.length} existing releases`);
+        releaseYear = JSON.parse(serializedData);
+        core.info(`Extending year ${year} with ${releaseYear.releases.length} existing releases`);
     }
-    yearReleases.releases.push(release);
-    await createOrUpdateContent(context, path, JSON.stringify(yearReleases), existingSha);
+    releaseYear.releases.push(release);
+    await createOrUpdateContent(context, path, JSON.stringify(releaseYear), existingSha);
     core.info(`Saved release ${release.id}`);
-    return release.id;
+    return { releaseYear, releaseId: release.id };
 }
-exports.createRelease = createRelease;
+exports.createOrUpdateRelease = createOrUpdateRelease;

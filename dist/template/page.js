@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generatePage = void 0;
-exports.generatePage = () => `<!DOCTYPE html>
+exports.generatePage = (releases, repo) => `<!DOCTYPE html>
 <html>
   <head>
     <title>Metrics</title>
@@ -32,10 +32,7 @@ exports.generatePage = () => `<!DOCTYPE html>
       dayjs.extend(window.dayjs_plugin_relativeTime);
 
       const displayReleases = async (url) => {
-        const res = await fetch(
-          \`https://floric.github.io/repo-monitor-action/data/releases/\${new Date().getFullYear()}/releases.json\`
-        );
-        const parsed = await res.json();
+        const parsed = ${releases};
         const releasesMap = new Map();
         parsed.releases
           .sort((a, b) => b.timestamp - a.timestamp)
@@ -81,7 +78,7 @@ exports.generatePage = () => `<!DOCTYPE html>
           <h2 class="text-xl mb-2 mt-8 font-bold">Values</h2>
         </div>
         <div>
-          <p class="text-center">Generated ${new Date().toLocaleString()}</p>
+          <p class="text-center">Generated ${new Date().toLocaleString()} for ${repo.owner}/${repo.repo}</p>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ async function runAction() {
             throw new Error("Invalid arguments delivered");
         }
         const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
-        const releaseId = await github_1.createRelease(context);
+        const { releaseId, releaseYear } = await github_1.createOrUpdateRelease(context);
         const { serializedData, existingSha } = await github_1.getContent(context, path);
         let data;
         if (!serializedData) {
@@ -30,7 +30,7 @@ async function runAction() {
         });
         const content = JSON.stringify(data);
         await github_1.createOrUpdateContent(context, path, content, existingSha);
-        await updater_1.updateTemplate(context);
+        await updater_1.updateTemplate(context, releaseYear);
         core.info("Finished processing new metrics");
     }
     catch (error) {

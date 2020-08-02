@@ -66,7 +66,7 @@ export function getContext() {
   return context;
 }
 
-export async function createRelease(context: MetricsContext) {
+export async function createOrUpdateRelease(context: MetricsContext) {
   const now = new Date();
   const year = now.getUTCFullYear();
   const release: Release = {
@@ -75,26 +75,26 @@ export async function createRelease(context: MetricsContext) {
   };
   const path = `data/releases/${year}/releases.json`;
   const { existingSha, serializedData } = await getContent(context, path);
-  let yearReleases: ReleaseYear;
+  let releaseYear: ReleaseYear;
   if (!serializedData) {
     core.info(`Creating year ${year} for new release`);
-    yearReleases = { releases: [], year };
+    releaseYear = { releases: [], year };
   } else {
-    yearReleases = JSON.parse(serializedData);
+    releaseYear = JSON.parse(serializedData);
     core.info(
-      `Extending year ${year} with ${yearReleases.releases.length} existing releases`
+      `Extending year ${year} with ${releaseYear.releases.length} existing releases`
     );
   }
-  yearReleases.releases.push(release);
+  releaseYear.releases.push(release);
 
   await createOrUpdateContent(
     context,
     path,
-    JSON.stringify(yearReleases),
+    JSON.stringify(releaseYear),
     existingSha
   );
 
   core.info(`Saved release ${release.id}`);
 
-  return release.id;
+  return { releaseYear, releaseId: release.id };
 }

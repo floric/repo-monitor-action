@@ -3,7 +3,7 @@ import {
   createOrUpdateContent,
   getContent,
   getContext,
-  createRelease,
+  createOrUpdateRelease,
 } from "./io/github";
 import { MetricsData } from "./model";
 import { updateTemplate } from "./template/updater";
@@ -18,7 +18,7 @@ async function runAction() {
     }
     const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
 
-    const releaseId = await createRelease(context);
+    const { releaseId, releaseYear } = await createOrUpdateRelease(context);
 
     const { serializedData, existingSha } = await getContent(context, path);
     let data: MetricsData;
@@ -38,7 +38,7 @@ async function runAction() {
 
     const content = JSON.stringify(data);
     await createOrUpdateContent(context, path, content, existingSha);
-    await updateTemplate(context);
+    await updateTemplate(context, releaseYear);
 
     core.info("Finished processing new metrics");
   } catch (error) {
