@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/floric/repo-monitor-action/compare/v1.5.0...v1.6.0) (2020-08-02)
+
+
+### Features
+
+* Generate graphics ([9a9c71b](https://github.com/floric/repo-monitor-action/commit/9a9c71b72d76b232a98bac7baa55418b8a9fdfe4))
+
 ## [1.5.0](https://github.com/floric/repo-monitor-action/compare/v1.4.1...v1.5.0) (2020-08-02)
 
 
