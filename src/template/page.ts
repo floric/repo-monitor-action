@@ -55,7 +55,9 @@ export const generatePage = (
         return releasesMap;
       };
 
-      displayReleases();
+      window.onload = () => {
+        displayReleases();
+      };
     </script>
   </head>
   <body class="bg-gray-100 text-gray-900">
