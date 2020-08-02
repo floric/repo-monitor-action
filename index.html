@@ -43,7 +43,7 @@
         document.getElementById("tbl-releases-body").innerHTML = parsed.releases
           .map(
             (n, i) =>
-              `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
+            `<tr class="${i % 2 == 0 ? "bg-gray-200" : "bg-gray-300"}">
               <td class="px-4 py-2">${releasesMap.get(n.id)}</td>
               <td class="px-4 py-2">${dayjs(n.timestamp).fromNow()}</td>
               <td class="px-4 py-2">${n.id}</td>
@@ -56,7 +56,7 @@
       displayReleases();
     </script>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-100 text-gray-900">
     <div class="flex m-4 justify-center">
       <div class="w-full max-w-6xl">
         <h1 id="header-year" class="text-6xl mb-2">-</h1>
@@ -76,6 +76,9 @@
         </div>
         <div>
           <h2 class="text-xl mb-2 mt-8 font-bold">Values</h2>
+        </div>
+        <div>
+          <p class="text-center">Generated 8/2/2020, 10:02:08 AM</p>
         </div>
       </div>
     </div>
