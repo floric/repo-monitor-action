@@ -69,10 +69,6 @@ export function getContext() {
 export async function createOrUpdateRelease(context: MetricsContext) {
   const now = new Date();
   const year = now.getUTCFullYear();
-  const release: Release = {
-    id: context.releaseId,
-    timestamp: now.getTime(),
-  };
   const path = `data/releases/${year}/releases.json`;
   const { existingSha, serializedData } = await getContent(context, path);
   let releaseYear: ReleaseYear;
@@ -85,16 +81,28 @@ export async function createOrUpdateRelease(context: MetricsContext) {
       `Extending year ${year} with ${releaseYear.releases.length} existing releases`
     );
   }
-  releaseYear.releases.push(release);
 
-  await createOrUpdateContent(
-    context,
-    path,
-    JSON.stringify(releaseYear),
-    existingSha
+  let usedRelease: Release | undefined = releaseYear.releases.find(
+    (n) => n.id === context.releaseId
   );
+  if (!usedRelease) {
+    usedRelease = {
+      id: context.releaseId,
+      timestamp: now.getTime(),
+    };
+    releaseYear.releases.push(usedRelease);
 
-  core.info(`Saved release ${release.id}`);
+    await createOrUpdateContent(
+      context,
+      path,
+      JSON.stringify(releaseYear),
+      existingSha
+    );
 
-  return { releaseYear, releaseId: release.id };
+    core.info(`Saved release ${usedRelease.id}`);
+  } else {
+    core.info(`Using existing release ${usedRelease.id}`);
+  }
+
+  return { releaseYear, releaseId: usedRelease.id };
 }

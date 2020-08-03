@@ -18,9 +18,14 @@ async function runAction() {
     }
     const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
 
-    const { releaseId, releaseYear } = await createOrUpdateRelease(context);
+    const [
+      { releaseId, releaseYear },
+      { serializedData, existingSha },
+    ] = await Promise.all([
+      createOrUpdateRelease(context),
+      getContent(context, path),
+    ]);
 
-    const { serializedData, existingSha } = await getContent(context, path);
     let data: MetricsData;
     if (!serializedData) {
       core.info(`Called with new key "${key}", will create new file.`);
@@ -36,9 +41,10 @@ async function runAction() {
       releaseId,
     });
 
-    const content = JSON.stringify(data);
-    await createOrUpdateContent(context, path, content, existingSha);
-    await updateTemplate(context, releaseYear, [data]);
+    await Promise.all([
+      createOrUpdateContent(context, path, JSON.stringify(data), existingSha),
+      updateTemplate(context, releaseYear, [data]),
+    ]);
 
     core.info("Finished processing new metrics");
   } catch (error) {

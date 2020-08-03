@@ -1,16 +1,16 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/server";
-import * as Chart from "chart.js";
 import { CanvasRenderService } from "chartjs-node-canvas";
 import * as dayjs from "dayjs";
 import * as localizedFormat from "dayjs/plugin/localizedFormat";
-import { ReleaseYear, MetricsData } from "../model";
+import { ReleaseYear, MetricsData, ReleaseMap, Config } from "../model";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Releases } from "./components/Releases";
 import { Metrics } from "./components/Metrics";
 import { Page } from "./components/layout/Page";
 import { generateLineChart } from "./visualizations/line";
+import { importConfig } from "./config/importer";
 
 dayjs.extend(localizedFormat);
 
@@ -23,7 +23,8 @@ export const generatePage = async (
   releases.releases
     .sort((a, b) => b.timestamp - a.timestamp)
     .forEach((r, i) => releasesMap.set(r.id, releases.releases.length - i));
-  const graphics = await generateGraphics(data, releasesMap);
+  const config = await importConfig();
+  const graphics = await generateGraphics(data, config, releasesMap);
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -56,18 +57,33 @@ export const generatePage = async (
 </html>`;
 };
 
-const generateGraphics = (
+const generateGraphics = async (
   data: Array<MetricsData>,
-  releasesMap: Map<string, number>
-) =>
-  Promise.all(
-    data.map(async (d) => ({ data: d, img: await renderImage(d, releasesMap) }))
-  );
-
-const renderImage = async (
-  data: MetricsData,
-  releasesMap: Map<string, number>
+  config: Config,
+  releasesMap: ReleaseMap
 ) => {
+  const hiddenKeys = Object.entries(config.metrics)
+    .filter(([_, v]) => v.hidden)
+    .map(([k]) => k);
+
+  return await Promise.all(
+    data
+      .filter((d) => !hiddenKeys.find((x) => x == d.key))
+      .map(async (data) => {
+        const configForKey = config.metrics[data.key];
+        const img = await renderImage(data, releasesMap);
+        return {
+          data,
+          img,
+          description: configForKey?.description,
+          min: configForKey?.min,
+          max: configForKey?.max,
+        };
+      })
+  );
+};
+
+const renderImage = async (data: MetricsData, releasesMap: ReleaseMap) => {
   const canvasRenderService = new CanvasRenderService(300, 300);
   const buffer = await canvasRenderService.renderToBuffer(
     generateLineChart(data, releasesMap)

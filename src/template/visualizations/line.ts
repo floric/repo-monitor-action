@@ -1,9 +1,9 @@
 import { ChartConfiguration } from "chart.js";
-import { MetricsData } from "../../model";
+import { MetricsData, ReleaseMap } from "../../model";
 
 export const generateLineChart = (
   data: MetricsData,
-  releasesMap: Map<string, number>
+  releasesMap: ReleaseMap
 ): ChartConfiguration => {
   const displayedValues = data.values.sort((a, b) => a.timestamp - b.timestamp);
 

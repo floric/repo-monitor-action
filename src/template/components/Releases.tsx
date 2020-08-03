@@ -2,13 +2,13 @@ import * as React from "react";
 import * as dayjs from "dayjs";
 
 import { SubHeader } from "./SubHeader";
-import { ReleaseYear } from "../../model";
+import { ReleaseYear, ReleaseMap } from "../../model";
 
 const MAX_ITEMS = 10;
 
 export const Releases: React.FC<{
   year: ReleaseYear;
-  releasesMap: Map<string, number>;
+  releasesMap: ReleaseMap;
 }> = ({ year, releasesMap }) => {
   const newestReleases = year.releases
     .sort((a, b) => b.timestamp - a.timestamp)

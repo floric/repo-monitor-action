@@ -27,3 +27,18 @@ export type ReleaseYear = {
   year: number;
   releases: Array<Release>;
 };
+
+export type ReleaseMap = Map<string, number>;
+
+export type Config = {
+  metrics: {
+    [key: string]: MetricConfig;
+  };
+};
+
+export type MetricConfig = {
+  description?: string;
+  max?: number;
+  min?: number;
+  hidden?: boolean;
+};
