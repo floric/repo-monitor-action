@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/floric/repo-monitor-action/compare/v1.6.6...v1.7.0) (2020-08-05)
+
+
+### Features
+
+* Added first testcase ([decbc62](https://github.com/floric/repo-monitor-action/commit/decbc628d83d6c1ecf01ea5015c1f677febb53f0))
+* Added support for configuration ([2a5fe64](https://github.com/floric/repo-monitor-action/commit/2a5fe64583d5962d883bd79d9bff1656d80b50ea))
+
 ### [1.6.6](https://github.com/floric/repo-monitor-action/compare/v1.6.5...v1.6.6) (2020-08-02)
 
 
