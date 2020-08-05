@@ -57,7 +57,7 @@ export const generatePage = async (
 </html>`;
 };
 
-const generateGraphics = async (
+export const generateGraphics = async (
   data: Array<MetricsData>,
   config: Config,
   releasesMap: ReleaseMap

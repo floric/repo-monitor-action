@@ -8,13 +8,15 @@ import {
 import { MetricsData } from "./model";
 import { updateTemplate } from "./template/updater";
 
-async function runAction() {
+export async function runAction() {
   try {
     const context = getContext();
     const key = core.getInput("key");
     const value = core.getInput("value");
     if (!key || Number.isNaN(Number.parseFloat(value))) {
-      throw new Error("Invalid arguments delivered");
+      throw new Error(
+        `Invalid arguments delivered: (key=${key}, value=${value})`
+      );
     }
     const path = `data/values/${new Date().getUTCFullYear()}/${key}.json`;
 
@@ -47,8 +49,8 @@ async function runAction() {
     ]);
 
     core.info("Finished processing new metrics");
-  } catch (error) {
-    core.setFailed(error.message);
+  } catch (err) {
+    core.setFailed(err.message);
   }
 }
 

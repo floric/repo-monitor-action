@@ -1,5 +1,6 @@
 node_modules
 dist
+coverage
 deployment
 npm-debug.log
 Dockerfile
