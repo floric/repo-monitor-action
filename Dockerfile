@@ -10,6 +10,5 @@ USER node
 RUN yarn
 COPY --chown=node:node . .
 RUN NODE_ENV=production yarn build
-RUN yarn test
 RUN chmod +x entrypoint.sh
 ENTRYPOINT [ "./entrypoint.sh" ]

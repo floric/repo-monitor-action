@@ -5,8 +5,36 @@ import {
   getContext,
   createOrUpdateRelease,
 } from "./io/github";
-import { MetricsData } from "./model";
+import { MetricsData, MetricsContext } from "./model";
 import { updateTemplate } from "./template/updater";
+
+const createOrUpdateMetrics = async (
+  serializedData: string,
+  key: string,
+  value: string,
+  releaseId: string,
+  context: MetricsContext,
+  path: string,
+  existingSha: string
+) => {
+  let data: MetricsData;
+  if (!serializedData) {
+    core.info(`Called with new key "${key}", will create new file.`);
+    data = { key, type: "scalar", values: [] };
+  } else {
+    core.info(`Extending existing metrics for "${key}"`);
+    data = JSON.parse(serializedData);
+  }
+
+  data.values.push({
+    value: Number.parseFloat(value),
+    timestamp: new Date().getTime(),
+    releaseId,
+  });
+
+  await createOrUpdateContent(context, path, JSON.stringify(data), existingSha);
+  return data;
+};
 
 export async function runAction() {
   try {
@@ -28,25 +56,16 @@ export async function runAction() {
       getContent(context, path),
     ]);
 
-    let data: MetricsData;
-    if (!serializedData) {
-      core.info(`Called with new key "${key}", will create new file.`);
-      data = { key, type: "scalar", values: [] };
-    } else {
-      core.info(`Extending existing metrics for "${key}"`);
-      data = JSON.parse(serializedData);
-    }
-
-    data.values.push({
-      value: Number.parseFloat(value),
-      timestamp: new Date().getTime(),
+    let data: MetricsData = await createOrUpdateMetrics(
+      serializedData,
+      key,
+      value,
       releaseId,
-    });
-
-    await Promise.all([
-      createOrUpdateContent(context, path, JSON.stringify(data), existingSha),
-      updateTemplate(context, releaseYear, [data]),
-    ]);
+      context,
+      path,
+      existingSha
+    );
+    await updateTemplate(context, releaseYear, [data]);
 
     core.info("Finished processing new metrics");
   } catch (err) {
