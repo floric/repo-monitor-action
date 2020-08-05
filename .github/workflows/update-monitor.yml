@@ -22,13 +22,15 @@ jobs:
           echo "::set-output name=code_files_count:$SRC_FILES_COUNT"
       - uses: floric/repo-monitor-action@v1.7.3
         name: Update Report for Files Size
+        id: update-file-size
         with:
           key: code-size
           value: ${{ steps.projectmetrics.outputs.code_size }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: floric/repo-monitor-action@v1.7.3
         name: Update Report for Files Count
+        id: update-files-count
         with:
-          key: code-size
+          key: files-count
           value: ${{ steps.projectmetrics.outputs.code_files_count }}
           token: ${{ secrets.GITHUB_TOKEN }}
