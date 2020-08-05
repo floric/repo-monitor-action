@@ -1,3 +1,3 @@
 #!/bin/sh -l
 
-node dist/index.js
+node dist/src/index.js
