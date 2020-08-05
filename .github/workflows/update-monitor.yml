@@ -23,12 +23,11 @@ jobs:
         name: Update Report for Files Size
         with:
           key: code-size
-          value: ${{ code_size }}
+          value: ${{ env.code_size }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: floric/repo-monitor-action@v1.7.3
         name: Update Report for Files Count
-        id: update-files-count
         with:
           key: files-count
-          value: ${{ code_files_count }}
+          value: ${{ env.code_files_count }}
           token: ${{ secrets.GITHUB_TOKEN }}
