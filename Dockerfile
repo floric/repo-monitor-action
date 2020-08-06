@@ -5,5 +5,6 @@ COPY . .
 RUN mkdir -p /home/node/app/node_modules
 RUN yarn
 RUN NODE_ENV=production yarn build
+COPY . .
 RUN chmod +x entrypoint.sh
 ENTRYPOINT [ "./entrypoint.sh" ]
