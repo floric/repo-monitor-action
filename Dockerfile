@@ -1,8 +1,8 @@
 FROM node:12
 
-WORKDIR /home/node/app
+WORKDIR /github/workspace
 COPY . .
-RUN mkdir -p /home/node/app/node_modules
+RUN mkdir -p /github/workspace/node_modules
 RUN yarn
 RUN NODE_ENV=production yarn build
 COPY . .
