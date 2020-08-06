@@ -65,7 +65,7 @@ export async function runAction() {
       path,
       existingSha
     );
-    await updateTemplate(context, releaseYear, [data]);
+    await updateTemplate(context, releaseYear);
 
     core.info("Finished processing new metrics");
   } catch (err) {

@@ -18,12 +18,12 @@ import { Metrics } from "./components/Metrics";
 import { Page } from "./components/layout/Page";
 import { generateLineChart } from "./visualizations/line";
 import { importConfig } from "./config/importer";
+import { getContent } from "../io/github";
 
 dayjs.extend(localizedFormat);
 
 export const generatePage = async (
   releases: ReleaseYear,
-  data: Array<MetricsData>,
   context: MetricsContext
 ) => {
   const releasesMap = new Map<string, number>();
@@ -31,6 +31,7 @@ export const generatePage = async (
     .sort((a, b) => b.timestamp - a.timestamp)
     .forEach((r, i) => releasesMap.set(r.id, releases.releases.length - i));
   const config = await importConfig(context);
+  const data = await getAllData(config, context);
   const graphics = await generateGraphics(data, config, releasesMap);
   return `<!DOCTYPE html>
 <html>
@@ -71,22 +72,16 @@ export const generateGraphics = async (
 ): Promise<
   Map<string, { img: string; config: MetricConfig; data: MetricsData }>
 > => {
-  const hiddenKeys = Object.entries(config.metrics)
-    .filter(([_, v]) => v.hidden)
-    .map(([k]) => k);
-
   const allMetrics = await Promise.all(
-    data
-      .filter((d) => !hiddenKeys.find((x) => x == d.key))
-      .map(async (data) => {
-        const configForKey = config.metrics[data.key];
-        const img = await renderImage(data, releasesMap);
-        return {
-          data,
-          img,
-          config: configForKey,
-        };
-      })
+    data.map(async (data) => {
+      const configForKey = config.metrics[data.key];
+      const img = await renderImage(data, releasesMap);
+      return {
+        data,
+        img,
+        config: configForKey,
+      };
+    })
   );
 
   const resultMap = new Map();
@@ -102,4 +97,24 @@ const renderImage = async (data: MetricsData, releasesMap: ReleaseMap) => {
     generateLineChart(data, releasesMap)
   );
   return buffer.toString("base64");
+};
+
+const getAllData = async (config: Config, context: MetricsContext) => {
+  const keysToFetch = new Set(
+    Object.values(config.groups)
+      .map((g) => g.metrics)
+      .reduce((a, b) => [...a, ...b], [])
+  );
+  const rawData = await Promise.all(
+    Array.from(keysToFetch).map((key) =>
+      getContent(
+        context,
+        `data/values/${new Date().getUTCFullYear()}/${key}.json`
+      )
+    )
+  );
+  const data = rawData
+    .filter((n) => !!n.existingSha)
+    .map((n) => JSON.parse(n.serializedData));
+  return data;
 };

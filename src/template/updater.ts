@@ -5,12 +5,11 @@ import { generatePage } from "./page";
 
 export async function updateTemplate(
   context: MetricsContext,
-  releases: ReleaseYear,
-  data: Array<MetricsData>
+  releases: ReleaseYear
 ) {
   const { existingSha } = await getContent(context, "index.html");
 
-  const template = await generatePage(releases, data, context);
+  const template = await generatePage(releases, context);
 
   core.info(`Generated page successfully`);
 

@@ -47,5 +47,4 @@ export type MetricConfig = {
   description?: string;
   max?: number;
   min?: number;
-  hidden?: boolean;
 };
