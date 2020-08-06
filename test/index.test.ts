@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import { runAction } from "../src";
-import "jest-canvas-mock";
+
 describe("Main", () => {
   it("Should run full process", async () => {
     // given

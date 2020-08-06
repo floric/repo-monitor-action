@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ReleaseYear } from "../../model";
+import { ReleaseYear } from "../../../model";
 
 export const Header: React.FC<{
   year: ReleaseYear;

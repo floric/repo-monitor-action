@@ -14,8 +14,8 @@ export const Metrics: React.FC<{
     <SubHeader header="Metrics" />
     {Object.entries(config.groups).map(([groupKey, groupAtts]) => (
       <div key={`group-${groupKey}`}>
-        <h4>{groupAtts.name}</h4>
-        <p>{groupAtts.description}</p>
+        <h4 className="text-lg mb-2 mt-8 font-bold">{groupAtts.name}</h4>
+        <p className="mb-2">{groupAtts.description}</p>
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {groupAtts.metrics
             .map((n) => graphics.get(n))
@@ -34,7 +34,7 @@ export const Metrics: React.FC<{
                     />
                     <Statistics values={plainValues} />
                     {description ? (
-                      <div>
+                      <div className="mb-2">
                         <p>{description}</p>
                       </div>
                     ) : null}

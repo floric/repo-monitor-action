@@ -11,8 +11,8 @@ import {
   MetricsContext,
   MetricConfig,
 } from "../model";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { Footer } from "./components/layout/Footer";
+import { Header } from "./components/layout/Header";
 import { Releases } from "./components/Releases";
 import { Metrics } from "./components/Metrics";
 import { Page } from "./components/layout/Page";

@@ -20,13 +20,13 @@ jobs:
           SRC_FILES_COUNT=($(find src -type f | wc -l))
           echo "::set-env name=code_size::$SRC_SIZE"
           echo "::set-env name=code_files_count::$SRC_FILES_COUNT"
-      - uses: floric/repo-monitor-action@v1.7.6
+      - uses: floric/repo-monitor-action@v1.7.7
         name: Update Report for Files Size
         with:
           key: code-size
           value: ${{ env.code_size }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: floric/repo-monitor-action@v1.7.6
+      - uses: floric/repo-monitor-action@v1.7.7
         name: Update Report for Files Count
         with:
           key: files-count

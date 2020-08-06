@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "https://github.com/floric/repo-monitor-action.git",
   "author": "Florian Richter <floririchte@gmail.com>",
-  "license": "MIT",
+  "license": "Apache License 2.0",
   "scripts": {
     "build": "tsc --project tsconfig.prod.json",
     "release": "npx standard-version",
@@ -22,9 +22,6 @@
     ],
     "preset": "ts-jest",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
-    "setupFiles": [
-      "jest-canvas-mock"
-    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -43,7 +40,6 @@
     "chart.js": "^2.9.3",
     "chartjs-node-canvas": "^3.0.6",
     "dayjs": "^1.8.31",
-    "jest": "^26.2.2",
     "js-yaml": "^3.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
@@ -53,7 +49,7 @@
     "@types/jest": "^26.0.8",
     "@types/js-yaml": "^3.12.5",
     "@types/react": "^16.9.44",
-    "jest-canvas-mock": "^2.2.0",
+    "jest": "^26.2.2",
     "ts-jest": "^26.1.4",
     "typescript": "^3.9.7"
   }
