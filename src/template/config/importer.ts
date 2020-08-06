@@ -1,21 +1,22 @@
-import { Config } from "../../model";
+import { safeLoad } from "js-yaml";
+import * as github from "@actions/github";
+import { Config, MetricsContext } from "../../model";
+import { getContent } from "../../io/github";
 
-export const importConfig = async (): Promise<Config> => {
-  // TODO import from Github Workflow folder instead of using faked data
-  return {
-    metrics: {
-      ["percentages"]: {
-        description:
-          "Allow only a smaller spectrum of percentages. For safety reasons.",
-        max: 95,
-        min: 70,
-      },
-      ["small-numbers"]: {
-        hidden: true,
-      },
-      ["large-numbers"]: {
-        description: "This is very important data, because of its pure value.",
-      },
-    },
-  };
+const CONFIG_PATH = ".github/repo-monitor-action/config.yml";
+
+export const importConfig = async (
+  context: MetricsContext
+): Promise<Config> => {
+  const branch = github.context.ref;
+  const { existingSha, serializedData } = await getContent(
+    { ...context, ...{ branch } },
+    CONFIG_PATH
+  );
+  if (!existingSha) {
+    throw new Error(`No config provided at ${CONFIG_PATH} on ${branch}`);
+  }
+
+  const res = await safeLoad(serializedData);
+  return res as any;
 };

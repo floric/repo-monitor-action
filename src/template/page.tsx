@@ -3,7 +3,14 @@ import * as ReactDOM from "react-dom/server";
 import { CanvasRenderService } from "chartjs-node-canvas";
 import * as dayjs from "dayjs";
 import * as localizedFormat from "dayjs/plugin/localizedFormat";
-import { ReleaseYear, MetricsData, ReleaseMap, Config } from "../model";
+import {
+  ReleaseYear,
+  MetricsData,
+  ReleaseMap,
+  Config,
+  MetricsContext,
+  MetricConfig,
+} from "../model";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Releases } from "./components/Releases";
@@ -17,18 +24,18 @@ dayjs.extend(localizedFormat);
 export const generatePage = async (
   releases: ReleaseYear,
   data: Array<MetricsData>,
-  repo: { repo: string; owner: string }
+  context: MetricsContext
 ) => {
   const releasesMap = new Map<string, number>();
   releases.releases
     .sort((a, b) => b.timestamp - a.timestamp)
     .forEach((r, i) => releasesMap.set(r.id, releases.releases.length - i));
-  const config = await importConfig();
+  const config = await importConfig(context);
   const graphics = await generateGraphics(data, config, releasesMap);
   return `<!DOCTYPE html>
 <html>
   <head>
-    <title>${repo.owner}/${repo.repo} | Metrics</title>
+    <title>${context.owner}/${context.repo} | Metrics</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -47,9 +54,9 @@ export const generatePage = async (
   <body>
     ${ReactDOM.renderToStaticMarkup(
       <Page>
-        <Header year={releases} {...repo} />
+        <Header year={releases} repo={context.repo} owner={context.owner} />
         <Releases year={releases} releasesMap={releasesMap} />
-        <Metrics graphics={graphics} />
+        <Metrics config={config} graphics={graphics} />
         <Footer />
       </Page>
     )}
@@ -61,12 +68,14 @@ export const generateGraphics = async (
   data: Array<MetricsData>,
   config: Config,
   releasesMap: ReleaseMap
-) => {
+): Promise<
+  Map<string, { img: string; config: MetricConfig; data: MetricsData }>
+> => {
   const hiddenKeys = Object.entries(config.metrics)
     .filter(([_, v]) => v.hidden)
     .map(([k]) => k);
 
-  return await Promise.all(
+  const allMetrics = await Promise.all(
     data
       .filter((d) => !hiddenKeys.find((x) => x == d.key))
       .map(async (data) => {
@@ -75,12 +84,16 @@ export const generateGraphics = async (
         return {
           data,
           img,
-          description: configForKey?.description,
-          min: configForKey?.min,
-          max: configForKey?.max,
+          config: configForKey,
         };
       })
   );
+
+  const resultMap = new Map();
+  allMetrics.forEach((m) => {
+    resultMap.set(m.data.key, m);
+  });
+  return resultMap;
 };
 
 const renderImage = async (data: MetricsData, releasesMap: ReleaseMap) => {

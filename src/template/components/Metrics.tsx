@@ -1,42 +1,50 @@
 import * as React from "react";
 import { SubHeader } from "./SubHeader";
-import { MetricsData } from "../../model";
+import { MetricsData, Config, MetricConfig } from "../../model";
 import { Statistics } from "./Statistics";
 
 export const Metrics: React.FC<{
-  graphics: Array<{
-    data: MetricsData;
-    img: string;
-    max?: number;
-    min?: number;
-    description?: string;
-  }>;
-}> = ({ graphics }) => (
+  config: Config;
+  graphics: Map<
+    string,
+    { img: string; config: MetricConfig; data: MetricsData }
+  >;
+}> = ({ graphics, config }) => (
   <div>
     <SubHeader header="Metrics" />
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-      {graphics.map(({ data, img, description }) => {
-        const plainValues = data.values.map((n) => n.value);
-        return (
-          <div key={`d-${data.key}`}>
-            <h5 className="px-4 py-2 font-bold bg-gray-800 text-gray-100">
-              {data.key}
-            </h5>
-            <div className="bg-gray-200 p-4">
-              <img
-                src={`data:image/png;base64, ${img}`}
-                alt={`Change of ${data.key} throughout the releases`}
-              />
-              <Statistics values={plainValues} />
-              {description ? (
-                <div>
-                  <p>{description}</p>
+    {Object.entries(config.groups).map(([groupKey, groupAtts]) => (
+      <div
+        key={`group-${groupKey}`}
+        className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
+      >
+        <h4>{groupAtts.name}</h4>
+        <p>{groupAtts.description}</p>
+        {groupAtts.metrics
+          .map((n) => graphics.get(n))
+          .filter((n) => !!n)
+          .map(({ data, img, config: { description } }) => {
+            const plainValues = data.values.map((n) => n.value);
+            return (
+              <div key={`d-${data.key}`}>
+                <h5 className="px-4 py-2 font-bold bg-gray-800 text-gray-100">
+                  {data.key}
+                </h5>
+                <div className="bg-gray-200 p-4">
+                  <img
+                    src={`data:image/png;base64, ${img}`}
+                    alt={`Change of ${data.key} throughout the releases`}
+                  />
+                  <Statistics values={plainValues} />
+                  {description ? (
+                    <div>
+                      <p>{description}</p>
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
-          </div>
-        );
-      })}
-    </div>
+              </div>
+            );
+          })}
+      </div>
+    ))}
   </div>
 );

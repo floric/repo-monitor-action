@@ -23,7 +23,7 @@ export async function getContent(
         existingSha: res.data.sha,
       };
     } else {
-      core.warning(`Unexpected response code ${res?.status}`);
+      core.warning(`Unexpected response code ${res?.status} for ${path}`);
     }
   } catch (err) {
     core.error(

@@ -34,6 +34,13 @@ export type Config = {
   metrics: {
     [key: string]: MetricConfig;
   };
+  groups?: {
+    [key: string]: {
+      name: string;
+      description?: string;
+      metrics: Array<string>;
+    };
+  };
 };
 
 export type MetricConfig = {
