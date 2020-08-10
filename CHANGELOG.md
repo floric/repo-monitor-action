@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.14](https://github.com/floric/repo-monitor-action/compare/v1.7.13...v1.7.14) (2020-08-10)
+
+
+### Bug Fixes
+
+* Fixed Docker workdir path ([adcc02d](https://github.com/floric/repo-monitor-action/commit/adcc02d0733ee877e1086f7ba183a5a9d5a4cea3))
+
 ### [1.7.13](https://github.com/floric/repo-monitor-action/compare/v1.7.12...v1.7.13) (2020-08-06)
 
 ### [1.7.12](https://github.com/floric/repo-monitor-action/compare/v1.7.11...v1.7.12) (2020-08-06)
