@@ -31,3 +31,21 @@ steps:
         value: ${{ steps.projectmetrics.outputs.code_size }}
         token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+The metrics need to be configured with a custom config:
+
+https://github.com/floric/repo-monitor-action/blob/master/.github/repo-monitor-action/config.yml
+
+The following config whould show the codesize as described in the action above:
+
+```
+metrics:
+  code-size:
+    description: Size of all source files in KB
+groups:
+  general:
+    name: General
+    description: This section shows code complexity metrics
+    metrics:
+      - code-size
+```
