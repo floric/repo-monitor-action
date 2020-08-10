@@ -3,6 +3,8 @@ metrics:
     description: Size of all source files in KB
   files-count:
     description: Number of source files
+  statement-coverage:
+    description: Statement Coverage
 groups:
   general:
     name: General
@@ -10,3 +12,7 @@ groups:
     metrics:
       - code-size
       - files-count
+  tests:
+    name: Testing
+    metrics:
+      - statement-coverage

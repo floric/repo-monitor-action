@@ -17,7 +17,8 @@
       "src/**/*.{ts,tsx}"
     ],
     "coverageReporters": [
-      "text-summary"
+      "text-summary",
+      "json-summary"
     ],
     "preset": "ts-jest",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
