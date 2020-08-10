@@ -11,10 +11,6 @@ export const calcAvg = (values: Array<number>) =>
   values.reduce((a, b) => a + b, 0) / values.length;
 
 export const calcPercentile = (values: Array<number>, percentile: number) => {
-  if (percentile <= 0 || percentile >= 100) {
-    throw new Error("Illegal percentile " + percentile);
-  }
-
   const sorted = values.sort();
   const index = values.length * (percentile / 100);
   const lowerBound = Math.floor(index);

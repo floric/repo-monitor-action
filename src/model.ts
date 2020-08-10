@@ -34,7 +34,7 @@ export type Config = {
   metrics: {
     [key: string]: MetricConfig;
   };
-  groups?: {
+  groups: {
     [key: string]: {
       name: string;
       description?: string;

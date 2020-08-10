@@ -1,12 +1,37 @@
 import { safeDump } from "js-yaml";
-import { toBase64 } from "../../../src/io/encoding";
-import { ReleaseYear, MetricsData, Config } from "../../../src/model";
+import { toBase64 } from "../../src/io/encoding";
+import { ReleaseYear, MetricsData, Config } from "../../src/model";
 
 export const getOctokit = () => ({
   repos: {
     createOrUpdateFileContents: async () => {},
-    getContent: async (arg) => {
-      if (arg.path.endsWith("releases.json")) {
+    ...mockAnswer([]),
+  },
+});
+
+export const context = {
+  repo: {
+    repo: "repo",
+    owner: "owner",
+  },
+  ref: "master",
+};
+
+export const createAnswer = (serializedData: string) => ({
+  status: 200,
+  data: {
+    content: toBase64(serializedData),
+    sha: "abc",
+  },
+});
+
+export const mockAnswer = (
+  answer?: Array<{ key: string; content: string | null }>
+) => ({
+  getContent: async (arg) => {
+    const year = new Date().getFullYear();
+    const mockAnswers = {
+      [`data/releases/${year}/releases.json`]: () => {
         const year: ReleaseYear = {
           year: 2020,
           releases: [
@@ -15,7 +40,8 @@ export const getOctokit = () => ({
           ],
         };
         return createAnswer(JSON.stringify(year));
-      } else if (arg.path.endsWith("config.yml")) {
+      },
+      [`.github/repo-monitor-action/config.yml`]: () => {
         const config: Config = {
           metrics: {
             ["key-a"]: {
@@ -43,14 +69,16 @@ export const getOctokit = () => ({
           },
         };
         return createAnswer(safeDump(config));
-      } else if (arg.path.endsWith("key-a.json")) {
+      },
+      [`data/values/${year}/key-a.json`]: () => {
         const data: MetricsData = {
           key: "key-a",
           type: "scalar",
           values: [{ value: 1, releaseId: "rel-a", timestamp: 1 }],
         };
         return createAnswer(JSON.stringify(data));
-      } else if (arg.path.endsWith("key-b.json")) {
+      },
+      [`data/values/${year}/key-b.json`]: () => {
         const data: MetricsData = {
           key: "key-b",
           type: "scalar",
@@ -60,29 +88,21 @@ export const getOctokit = () => ({
           ],
         };
         return createAnswer(JSON.stringify(data));
-      } else if (arg.path.endsWith("index.html")) {
+      },
+      [`index.html`]: () => {
         return createAnswer("");
-      } else {
-        return {
-          status: 404,
-        };
-      }
-    },
-  },
-});
-
-export const context = {
-  repo: {
-    repo: "repo",
-    owner: "owner",
-  },
-  ref: "master",
-};
-
-const createAnswer = (serializedData: string) => ({
-  status: 200,
-  data: {
-    content: toBase64(serializedData),
-    sha: "abc",
+      },
+    };
+    answer.forEach((a) => {
+      mockAnswers[a.key] = () => createAnswer(a.content);
+    });
+    const sendAnswer = mockAnswers[arg.path];
+    if (!sendAnswer) {
+      return {
+        status: 404,
+      };
+    } else {
+      return sendAnswer() || { status: 404 };
+    }
   },
 });

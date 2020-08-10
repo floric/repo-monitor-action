@@ -18,5 +18,12 @@ export const importConfig = async (
   }
 
   const res = await safeLoad(serializedData);
+
+  if (
+    !Object.keys(res).find((n) => n === "metrics") ||
+    !Object.keys(res).find((n) => n === "groups")
+  ) {
+    throw new Error("Configuration is missing metrics or groups on root level");
+  }
   return res as any;
 };
