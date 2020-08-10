@@ -34,3 +34,9 @@ jobs:
           key: files-count
           value: ${{ env.code_files_count }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./
+        name: Update Report for Statement Coverage
+        with:
+          key: statement-coverage
+          value: ${{ env.statement-coverage }}
+          token: ${{ secrets.GITHUB_TOKEN }}
