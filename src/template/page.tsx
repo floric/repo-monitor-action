@@ -34,7 +34,14 @@ export const generatePage = async (
   const config = await importConfig(context);
   const data = await getAllData(config, context);
   const graphics = await generateGraphics(data, config, releasesMap);
-  const props = { releases, releasesMap, config, graphics, context };
+  const props = {
+    releases,
+    releasesMap,
+    config,
+    graphics,
+    context,
+    date: new Date(),
+  };
   return `<!DOCTYPE html>
 <html>
   <head>

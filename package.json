@@ -21,8 +21,12 @@
       "text-summary",
       "json-summary"
     ],
+    "setupFiles": [
+      "./test/setupTests.ts"
+    ],
     "preset": "ts-jest",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "testEnvironment": "jsdom",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -46,11 +50,14 @@
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@testing-library/react": "^10.4.8",
     "@types/chart.js": "^2.9.23",
     "@types/jest": "^26.0.8",
     "@types/js-yaml": "^3.12.5",
     "@types/react": "^16.9.44",
     "jest": "^26.2.2",
+    "jest-image-snapshot": "^4.1.0",
+    "jsdom-screenshot": "^3.2.0",
     "react-test-renderer": "^16.13.1",
     "ts-jest": "^26.1.4",
     "typescript": "^3.9.7"
