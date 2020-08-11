@@ -17,8 +17,3 @@ export const calcPercentile = (values: Array<number>, percentile: number) => {
   const upperBound = Math.ceil(index);
   return (sorted[lowerBound] + sorted[upperBound]) / 2;
 };
-
-export const calcMedian = (values: Array<number>) => calcPercentile(values, 50);
-
-export const getRandomInteger = (max: number) =>
-  Math.floor(max * Math.random());

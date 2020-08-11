@@ -19,7 +19,7 @@ const createOrUpdateMetrics = async (
 ) => {
   let data: MetricsData;
   if (!serializedData) {
-    core.info(`Called with new key "${key}", will create new file.`);
+    core.info(`Saving new metrics for key "${key}"`);
     data = { key, type: "scalar", values: [] };
   } else {
     core.info(`Extending existing metrics for "${key}"`);

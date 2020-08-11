@@ -19,7 +19,12 @@ describe("General", () => {
     // then
     expect(coreMock.setFailed.mock.calls.length).toBe(0);
     expect(coreMock.error.mock.calls.length).toBe(0);
-    expect(coreMock.info.mock.calls.length).toBeTruthy();
+    expect(coreMock.info.mock.calls).toContainEqual([
+      "Using existing release rel-a",
+    ]);
+    expect(coreMock.info.mock.calls).toContainEqual([
+      'Extending existing metrics for "key-a"',
+    ]);
   });
 
   it("Should fail with invalid config", async () => {
@@ -134,5 +139,97 @@ describe("General", () => {
     expect(coreMock.setFailed.mock.calls).toContainEqual([
       "Invalid arguments delivered: (key=undefined, value=1)",
     ]);
+  });
+
+  it("Should create new value", async () => {
+    // given
+    const { coreMock } = prepareMocks(core, {
+      ...github,
+      ...{
+        getOctokit: () => ({
+          repos: {
+            ...github.getOctokit().repos,
+            ...mockAnswer([
+              {
+                key: `data/values/${new Date().getFullYear()}/key-a.json`,
+                content: null,
+              },
+            ]),
+          },
+        }),
+      },
+    });
+
+    // when
+    await require("../src/logic").runAction();
+
+    // then
+    expect(coreMock.setFailed.mock.calls.length).toBe(0);
+    expect(coreMock.info.mock.calls).toContainEqual([
+      'Saving new metrics for key "key-a"',
+    ]);
+  });
+
+  it("Should create new release year", async () => {
+    // given
+    const { coreMock } = prepareMocks(core, {
+      ...github,
+      ...{
+        getOctokit: () => ({
+          repos: {
+            ...github.getOctokit().repos,
+            ...mockAnswer([
+              {
+                key: `data/releases/${new Date().getFullYear()}/releases.json`,
+                content: null,
+              },
+            ]),
+          },
+        }),
+      },
+    });
+
+    // when
+    await require("../src/logic").runAction();
+
+    // then
+    expect(coreMock.setFailed.mock.calls.length).toBe(0);
+    expect(coreMock.info.mock.calls).toContainEqual([
+      `Creating year ${new Date().getFullYear()} for new release`,
+    ]);
+    expect(coreMock.info.mock.calls).toContainEqual(["Saved release rel-a"]);
+  });
+
+  it("Should create new release for existing year", async () => {
+    // given
+    const { coreMock } = prepareMocks(core, {
+      ...github,
+      ...{
+        getOctokit: () => ({
+          repos: {
+            ...github.getOctokit().repos,
+            ...mockAnswer([
+              {
+                key: `data/releases/${new Date().getFullYear()}/releases.json`,
+                content: JSON.stringify({
+                  year: new Date().getFullYear(),
+                  releases: [
+                    { timestamp: 1, id: "rel-x" },
+                    { timestamp: 2, id: "rel-y" },
+                  ],
+                }),
+              },
+            ]),
+          },
+        }),
+      },
+    });
+
+    // when
+    await require("../src/logic").runAction();
+
+    // then
+    expect(coreMock.setFailed.mock.calls.length).toBe(0);
+    expect(coreMock.info.mock.calls).toContainEqual(["Saved release rel-a"]);
   });
 });

@@ -14,6 +14,7 @@ export const context = {
     repo: "repo",
     owner: "owner",
   },
+  sha: "rel-a",
   ref: "master",
 };
 
@@ -33,7 +34,7 @@ export const mockAnswer = (
     const mockAnswers = {
       [`data/releases/${year}/releases.json`]: () => {
         const year: ReleaseYear = {
-          year: 2020,
+          year: new Date().getFullYear(),
           releases: [
             { timestamp: 1, id: "rel-a" },
             { timestamp: 2, id: "rel-b" },

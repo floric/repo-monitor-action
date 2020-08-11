@@ -11,16 +11,17 @@ import {
   MetricsContext,
   MetricConfig,
 } from "../model";
-import { Footer } from "./components/layout/Footer";
-import { Header } from "./components/layout/Header";
-import { Releases } from "./components/Releases";
-import { Metrics } from "./components/Metrics";
-import { Page } from "./components/layout/Page";
 import { generateLineChart } from "./visualizations/line";
 import { importConfig } from "./config/importer";
 import { getContent } from "../io/github";
+import { Report } from "./Report";
 
 dayjs.extend(localizedFormat);
+
+export type ChartGraphics = Map<
+  string,
+  { img: string; config: MetricConfig; data: MetricsData }
+>;
 
 export const generatePage = async (
   releases: ReleaseYear,
@@ -33,6 +34,7 @@ export const generatePage = async (
   const config = await importConfig(context);
   const data = await getAllData(config, context);
   const graphics = await generateGraphics(data, config, releasesMap);
+  const props = { releases, releasesMap, config, graphics, context };
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -53,14 +55,7 @@ export const generatePage = async (
     />
   </head>
   <body>
-    ${ReactDOM.renderToStaticMarkup(
-      <Page>
-        <Header year={releases} repo={context.repo} owner={context.owner} />
-        <Releases year={releases} releasesMap={releasesMap} />
-        <Metrics config={config} graphics={graphics} />
-        <Footer />
-      </Page>
-    )}
+    ${ReactDOM.renderToStaticMarkup(<Report {...props} />)}
   </body>
 </html>`;
 };
@@ -69,9 +64,7 @@ export const generateGraphics = async (
   data: Array<MetricsData>,
   config: Config,
   releasesMap: ReleaseMap
-): Promise<
-  Map<string, { img: string; config: MetricConfig; data: MetricsData }>
-> => {
+): Promise<ChartGraphics> => {
   const allMetrics = await Promise.all(
     data.map(async (data) => {
       const configForKey = config.metrics[data.key];
