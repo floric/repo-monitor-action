@@ -89,14 +89,14 @@ describe("Report", () => {
 
 function prepareDom() {
   const div = document.createElement("div");
-  var head = document.getElementsByTagName("head")[0];
-  var link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.type = "text/css";
-  link.href =
-    "https://cdn.jsdelivr.net/npm/tailwindcss@1.6.0/dist/tailwind.min.css";
-  link.media = "all";
-  head.appendChild(link);
+  // var head = document.getElementsByTagName("head")[0];
+  // var link = document.createElement("link");
+  // link.rel = "stylesheet";
+  // link.type = "text/css";
+  // link.href =
+  //   "https://cdn.jsdelivr.net/npm/tailwindcss@1.6.0/dist/tailwind.min.css";
+  // link.media = "all";
+  // head.appendChild(link);
   document.body.appendChild(div);
   return div;
 }
