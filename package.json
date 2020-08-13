@@ -44,7 +44,7 @@
     "@types/react-dom": "^16.9.8",
     "chart.js": "^2.9.3",
     "chartjs-node-canvas": "^3.0.6",
-    "dayjs": "^1.8.31",
+    "dayjs": "^1.8.33",
     "js-yaml": "^3.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
