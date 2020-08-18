@@ -18,7 +18,7 @@ export const Report: React.FC<{
   <Page>
     <Header year={releases} repo={context.repo} owner={context.owner} />
     <Releases year={releases} releasesMap={releasesMap} />
-    <Metrics config={config} graphics={graphics} />
+    <Metrics config={config} releasesMap={releasesMap} graphics={graphics} />
     <Footer date={date} />
   </Page>
 );

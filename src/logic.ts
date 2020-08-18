@@ -28,7 +28,6 @@ const createOrUpdateMetrics = async (
 
   data.values.push({
     value: Number.parseFloat(value),
-    timestamp: new Date().getTime(),
     releaseId,
   });
 

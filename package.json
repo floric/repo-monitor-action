@@ -42,12 +42,11 @@
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
     "@types/react-dom": "^16.9.8",
-    "chart.js": "^2.9.3",
-    "chartjs-node-canvas": "^3.0.6",
     "dayjs": "^1.8.31",
     "js-yaml": "^3.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-vis": "^1.11.7",
     "tailwindcss": "^1.6.2"
   },
   "devDependencies": {
@@ -56,6 +55,7 @@
     "@types/jest": "^26.0.8",
     "@types/js-yaml": "^3.12.5",
     "@types/react": "^16.9.44",
+    "@types/react-vis": "^1.11.2",
     "jest": "^26.2.2",
     "jest-image-snapshot": "^4.1.0",
     "jsdom-screenshot": "^3.2.0",

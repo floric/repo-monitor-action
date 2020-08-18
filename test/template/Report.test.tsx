@@ -16,6 +16,9 @@ describe("Report", () => {
     const releasesMap = new Map();
     releasesMap.set("rel-a", 1);
     releasesMap.set("rel-b", 2);
+    releasesMap.set("rel-x", 6);
+    releasesMap.set("rel-y", 7);
+    releasesMap.set("rel-z", 8);
     const graphics: ChartGraphics = new Map();
     graphics.set("key-a", {
       config: { description: "Key A" },
@@ -23,23 +26,24 @@ describe("Report", () => {
         key: "key-a",
         type: "scalar",
         values: [
-          { releaseId: "rel-b", value: 2, timestamp: 1 },
-          { releaseId: "rel-a", value: 1, timestamp: 2 },
-          { releaseId: "rel-x", value: -1, timestamp: 3 },
-          { releaseId: "rel-y", value: -2, timestamp: 4 },
-          { releaseId: "rel-z", value: -3, timestamp: 5 },
+          { releaseId: "rel-a", value: 2 },
+          { releaseId: "rel-b", value: 1 },
+          { releaseId: "rel-x", value: -1 },
+          { releaseId: "rel-y", value: -2 },
+          { releaseId: "rel-z", value: -3 },
         ],
       },
-      img: "",
     });
     graphics.set("key-b", {
       config: {},
       data: {
         key: "key-b",
         type: "scalar",
-        values: [{ releaseId: "rel-a", value: 1, timestamp: 2 }],
+        values: [
+          { releaseId: "rel-a", value: 1 },
+          { releaseId: "rel-b", value: 1 },
+        ],
       },
-      img: "",
     });
     ReactDOM.render(
       <Report
@@ -84,10 +88,7 @@ describe("Report", () => {
     const screenshot = await generateImage({
       viewport: { width: 1024, height: 1024 },
     });
-    (expect(screenshot) as any).toMatchImageSnapshot({
-      failureThreshold: 0.5,
-      failureThresholdType: "percent",
-    });
+    (expect(screenshot) as any).toMatchImageSnapshot();
   });
 });
 
@@ -95,9 +96,11 @@ function prepareDom() {
   const div = document.createElement("div");
   var head = document.getElementsByTagName("head")[0];
   var style = document.createElement("style");
-  style.innerHTML = readFileSync(
+  style.innerHTML = `${readFileSync(
     "node_modules/tailwindcss/dist/tailwind.min.css"
-  ).toString();
+  ).toString()}
+  
+  ${readFileSync("node_modules/react-vis/dist/style.css").toString()}`;
   head.appendChild(style);
   document.body.appendChild(div);
   return div;

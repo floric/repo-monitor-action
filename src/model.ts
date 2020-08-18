@@ -1,6 +1,5 @@
 export type MetricsValue<T> = {
   value: T;
-  timestamp: number;
   releaseId: string;
 };
 

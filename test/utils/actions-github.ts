@@ -75,7 +75,7 @@ export const mockAnswer = (
         const data: MetricsData = {
           key: "key-a",
           type: "scalar",
-          values: [{ value: 1, releaseId: "rel-a", timestamp: 1 }],
+          values: [{ value: 1, releaseId: "rel-a" }],
         };
         return createAnswer(JSON.stringify(data));
       },
@@ -84,8 +84,8 @@ export const mockAnswer = (
           key: "key-b",
           type: "scalar",
           values: [
-            { value: 1, releaseId: "rel-a", timestamp: 1 },
-            { value: -2, releaseId: "rel-b", timestamp: 1 },
+            { value: 1, releaseId: "rel-a" },
+            { value: -2, releaseId: "rel-b" },
           ],
         };
         return createAnswer(JSON.stringify(data));

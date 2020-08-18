@@ -1,14 +1,20 @@
 import * as React from "react";
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  HorizontalGridLines,
+  VerticalGridLines,
+  VerticalBarSeries,
+} from "react-vis";
 import { SubHeader } from "./SubHeader";
 import { MetricsData, Config, MetricConfig } from "../../model";
 import { Statistics } from "./Statistics";
 
 export const Metrics: React.FC<{
   config: Config;
-  graphics: Map<
-    string,
-    { img: string; config: MetricConfig; data: MetricsData }
-  >;
+  releasesMap: Map<string, number>;
+  graphics: Map<string, { config: MetricConfig; data: MetricsData }>;
 }> = ({ graphics, config }) => (
   <div>
     <SubHeader header="Metrics" />
@@ -20,18 +26,28 @@ export const Metrics: React.FC<{
           {groupAtts.metrics
             .map((n) => graphics.get(n))
             .filter((n) => !!n)
-            .map(({ data, img, config: { description } }) => {
+            .map(({ data, config: { description } }) => {
               const plainValues = data.values.map((n) => n.value);
+              const displayedValues = data.values.map((n) => ({
+                x: n.releaseId,
+                y: n.value,
+              }));
               return (
                 <div key={`d-${data.key}`}>
                   <h5 className="px-4 py-2 font-bold bg-gray-800 text-gray-100">
                     {data.key}
                   </h5>
                   <div className="bg-gray-200 p-4">
-                    <img
-                      src={`data:image/png;base64, ${img}`}
-                      alt={`Change of ${data.key} throughout the releases`}
-                    />
+                    <XYPlot xType="ordinal" width={400} height={400}>
+                      <VerticalGridLines />
+                      <HorizontalGridLines />
+                      <XAxis />
+                      <YAxis />
+                      <VerticalBarSeries
+                        barWidth={0.9}
+                        data={displayedValues}
+                      />
+                    </XYPlot>
                     <Statistics values={plainValues} />
                     {description ? (
                       <div className="mb-2">

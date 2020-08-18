@@ -1,17 +1,14 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/server";
-import { CanvasRenderService } from "chartjs-node-canvas";
 import * as dayjs from "dayjs";
 import * as localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   ReleaseYear,
   MetricsData,
-  ReleaseMap,
   Config,
   MetricsContext,
   MetricConfig,
 } from "../model";
-import { generateLineChart } from "./visualizations/line";
 import { importConfig } from "./config/importer";
 import { getContent } from "../io/github";
 import { Report } from "./Report";
@@ -20,7 +17,7 @@ dayjs.extend(localizedFormat);
 
 export type ChartGraphics = Map<
   string,
-  { img: string; config: MetricConfig; data: MetricsData }
+  { config: MetricConfig; data: MetricsData }
 >;
 
 export const generatePage = async (
@@ -33,7 +30,7 @@ export const generatePage = async (
     .forEach((r, i) => releasesMap.set(r.id, releases.releases.length - i));
   const config = await importConfig(context);
   const data = await getAllData(config, context);
-  const graphics = await generateGraphics(data, config, releasesMap);
+  const graphics = await generateGraphics(data, config);
   const props = {
     releases,
     releasesMap,
@@ -60,6 +57,12 @@ export const generatePage = async (
       integrity="sha256-HmKKK3VimMDCOGPTx1mp/5Iaip6BWMZy5HMhLc+4o9E="
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/react-vis@1.11.7/dist/style.css"
+      integrity="sha256-uTTyxESm1mbElCHBVDnB3kYjSQ/WWdhItODj347ICOY="
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     ${ReactDOM.renderToStaticMarkup(<Report {...props} />)}
@@ -69,16 +72,13 @@ export const generatePage = async (
 
 export const generateGraphics = async (
   data: Array<MetricsData>,
-  config: Config,
-  releasesMap: ReleaseMap
+  config: Config
 ): Promise<ChartGraphics> => {
   const allMetrics = await Promise.all(
     data.map(async (data) => {
       const configForKey = config.metrics[data.key];
-      const img = await renderImage(data, releasesMap);
       return {
         data,
-        img,
         config: configForKey,
       };
     })
@@ -89,14 +89,6 @@ export const generateGraphics = async (
     resultMap.set(m.data.key, m);
   });
   return resultMap;
-};
-
-const renderImage = async (data: MetricsData, releasesMap: ReleaseMap) => {
-  const canvasRenderService = new CanvasRenderService(300, 300);
-  const buffer = await canvasRenderService.renderToBuffer(
-    generateLineChart(data, releasesMap)
-  );
-  return buffer.toString("base64");
 };
 
 const getAllData = async (config: Config, context: MetricsContext) => {
