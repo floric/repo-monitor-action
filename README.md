@@ -6,6 +6,8 @@ The example for the project itself can found at:
 
 https://floric.github.io/repo-monitor-action/
 
+Please note, this action **will commit changes to the `gh-pages` branch** and use subfolders to save the metrics.
+
 ## Usage
 
 An extensive example for this project can found at:
@@ -18,15 +20,15 @@ The following steps generate some data and push them through the action to Pages
 steps:
     - uses: actions/checkout@v2.3.1
     - name: Calculate project metrics
-    id: projectmetrics
-    run: |
+      id: projectmetrics
+      run: |
         yarn
         yarn build
         SIZE=($(du -s dist/))
         echo "::set-output name=code_size::$SIZE"
     - uses: floric/repo-monitor-action@v1.4.1
-    name: Update Report
-    with:
+      name: Update Report
+      with:
         key: code-size
         value: ${{ steps.projectmetrics.outputs.code_size }}
         token: ${{ secrets.GITHUB_TOKEN }}
