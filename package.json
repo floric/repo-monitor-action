@@ -47,7 +47,8 @@
     "dayjs": "^1.8.31",
     "js-yaml": "^3.14.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "tailwindcss": "^1.6.2"
   },
   "devDependencies": {
     "@testing-library/react": "^10.4.8",
