@@ -88,7 +88,10 @@ describe("Report", () => {
     const screenshot = await generateImage({
       viewport: { width: 1024, height: 1024 },
     });
-    (expect(screenshot) as any).toMatchImageSnapshot();
+    (expect(screenshot) as any).toMatchImageSnapshot({
+      failureThreshold: 0.3,
+      failureThresholdType: "percent",
+    });
   });
 });
 
