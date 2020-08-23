@@ -18,7 +18,7 @@ const context = {
 };
 
 const snapshotOpts = {
-  failureThreshold: 0.0001,
+  failureThreshold: 0.001,
   failureThresholdType: "percent",
 };
 
