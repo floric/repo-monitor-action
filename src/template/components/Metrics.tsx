@@ -41,7 +41,7 @@ export const Metrics: React.FC<{
                     <XYPlot xType="ordinal" width={400} height={400}>
                       <VerticalGridLines />
                       <HorizontalGridLines />
-                      <XAxis />
+                      <XAxis tickLabelAngle={0} />
                       <YAxis />
                       <VerticalBarSeries
                         barWidth={0.9}

@@ -12,6 +12,7 @@ import {
 import { importConfig } from "./config/importer";
 import { getContent } from "../io/github";
 import { Report } from "./Report";
+import { importCss } from "./style";
 
 dayjs.extend(localizedFormat);
 
@@ -47,22 +48,11 @@ export const generatePage = async (
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@1.6.0/dist/tailwind.min.css"
-      integrity="sha256-Y4vGjLmrpriLD3X1h1YdyzE2icdiBsJHBXORYXlyDwM="
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"
       integrity="sha256-HmKKK3VimMDCOGPTx1mp/5Iaip6BWMZy5HMhLc+4o9E="
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/react-vis@1.11.7/dist/style.css"
-      integrity="sha256-uTTyxESm1mbElCHBVDnB3kYjSQ/WWdhItODj347ICOY="
-      crossorigin="anonymous"
-    />
+    <style>${importCss()}</style>
   </head>
   <body>
     ${ReactDOM.renderToStaticMarkup(<Report {...props} />)}

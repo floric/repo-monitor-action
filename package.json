@@ -42,25 +42,25 @@
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
     "@types/react-dom": "^16.9.8",
-    "dayjs": "^1.8.33",
+    "dayjs": "^1.8.34",
     "js-yaml": "^3.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-vis": "^1.11.7",
-    "tailwindcss": "^1.6.2"
+    "tailwindcss": "^1.7.3"
   },
   "devDependencies": {
-    "@testing-library/react": "^10.4.8",
-    "@types/chart.js": "^2.9.23",
+    "@testing-library/react": "^10.4.9",
+    "@types/chart.js": "^2.9.24",
     "@types/jest": "^26.0.10",
     "@types/js-yaml": "^3.12.5",
-    "@types/react-vis": "^1.11.2",
     "@types/react": "^16.9.46",
-    "jest": "^26.4.0",
+    "@types/react-vis": "^1.11.2",
+    "jest": "^26.4.2",
     "jest-image-snapshot": "^4.1.0",
     "jsdom-screenshot": "^3.2.0",
     "react-test-renderer": "^16.13.1",
     "ts-jest": "^26.2.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   }
 }
