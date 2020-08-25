@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/server";
+import PurgeCSS from "purgecss";
+import * as core from "@actions/core";
 import * as dayjs from "dayjs";
 import * as localizedFormat from "dayjs/plugin/localizedFormat";
 import {
@@ -25,6 +27,22 @@ export const generatePage = async (
   releases: ReleaseYear,
   context: MetricsContext
 ) => {
+  const { body, css } = await preparePage(releases, context);
+
+  const purger = new PurgeCSS();
+  const res = await purger.purge({
+    content: [{ extension: "html", raw: body }],
+    css: [{ raw: css }],
+  });
+
+  const reducedCss = res.map((n) => n.css).reduce((a, b) => `${a}\n${b}`);
+
+  core.info(`Reduced CSS ${100 - (100 * reducedCss.length) / css.length}%`);
+
+  return await constructPage(body, reducedCss, context);
+};
+
+const preparePage = async (releases: ReleaseYear, context: MetricsContext) => {
   const releasesMap = new Map<string, number>();
   releases.releases
     .sort((a, b) => b.timestamp - a.timestamp)
@@ -40,6 +58,17 @@ export const generatePage = async (
     context,
     date: new Date(),
   };
+  return {
+    css: importCss(),
+    body: ReactDOM.renderToStaticMarkup(<Report {...props} />),
+  };
+};
+
+const constructPage = async (
+  body: string,
+  css: string,
+  context: MetricsContext
+) => {
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -52,15 +81,15 @@ export const generatePage = async (
       integrity="sha256-HmKKK3VimMDCOGPTx1mp/5Iaip6BWMZy5HMhLc+4o9E="
       crossorigin="anonymous"
     />
-    <style>${importCss()}</style>
+    <style>${css}</style>
   </head>
   <body>
-    ${ReactDOM.renderToStaticMarkup(<Report {...props} />)}
+    ${body}
   </body>
 </html>`;
 };
 
-export const generateGraphics = async (
+const generateGraphics = async (
   data: Array<MetricsData>,
   config: Config
 ): Promise<ChartGraphics> => {

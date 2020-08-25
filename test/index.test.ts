@@ -25,6 +25,9 @@ describe("General", () => {
     expect(coreMock.info.mock.calls).toContainEqual([
       'Extending existing metrics for "key-a"',
     ]);
+    expect(
+      coreMock.info.mock.calls.filter((n) => n[0].startsWith("Reduced CSS 9"))
+    ).toBeTruthy();
   });
 
   it("Should fail with invalid config", async () => {
