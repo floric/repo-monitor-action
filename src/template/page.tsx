@@ -33,6 +33,15 @@ export const generatePage = async (
   const res = await purger.purge({
     content: [{ extension: "html", raw: `<html><body>${body}</body></html>` }],
     css: [{ raw: css }],
+    defaultExtractor: (content) => {
+      // Capture as liberally as possible, including things like `h-(screen-1.5)`
+      const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [];
+
+      // Capture classes within other delimiters like .block(class="w-1/2") in Pug
+      const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
+
+      return broadMatches.concat(innerMatches);
+    },
   });
 
   const reducedCss = res.map((n) => n.css).reduce((a, b) => `${a}\n${b}`);
