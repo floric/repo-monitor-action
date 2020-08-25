@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/floric/repo-monitor-action/compare/v1.7.14...v1.8.0) (2020-08-25)
+
+
+### Features
+
+* Added CSS cleanup ([1466b60](https://github.com/floric/repo-monitor-action/commit/1466b60d262901d34af23775fcc17fcab32cde8e))
+* Use react-vis instead of chartjs ([e452727](https://github.com/floric/repo-monitor-action/commit/e4527276b322942d63c68db12a59a6446883655d))
+
+
+### Bug Fixes
+
+* Fixed missing body style ([6819afa](https://github.com/floric/repo-monitor-action/commit/6819afaab2e621c9b21ee90a406e68a184803d62))
+* Incread threshold again ([196cd04](https://github.com/floric/repo-monitor-action/commit/196cd04aa08c68de2a3bc2d15cb700098743514a))
+* Reduced threshold of snapshot testing ([c3ca1ff](https://github.com/floric/repo-monitor-action/commit/c3ca1ffc2141b45243d7f8deb933a5884c043e1c))
+* Try custom extractor for Tailwind ([138c1b3](https://github.com/floric/repo-monitor-action/commit/138c1b359d9f3f1e99891967c649a369e68fce5c))
+
 ### [1.7.14](https://github.com/floric/repo-monitor-action/compare/v1.7.13...v1.7.14) (2020-08-10)
 
 
