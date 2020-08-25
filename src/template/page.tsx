@@ -31,7 +31,7 @@ export const generatePage = async (
 
   const purger = new PurgeCSS();
   const res = await purger.purge({
-    content: [{ extension: "html", raw: body }],
+    content: [{ extension: "html", raw: `<html><body>${body}</body></html>` }],
     css: [{ raw: css }],
   });
 
