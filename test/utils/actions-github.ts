@@ -30,11 +30,11 @@ export const mockAnswer = (
   answer?: Array<{ key: string; content: string | null }>
 ) => ({
   getContent: async (arg) => {
-    const year = new Date().getFullYear();
+    const year = 2020;
     const mockAnswers = {
       [`data/releases/${year}/releases.json`]: () => {
         const year: ReleaseYear = {
-          year: new Date().getFullYear(),
+          year: 2020,
           releases: [
             { timestamp: 1, id: "rel-a" },
             { timestamp: 2, id: "rel-b" },

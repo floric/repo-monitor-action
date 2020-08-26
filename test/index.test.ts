@@ -154,7 +154,7 @@ describe("General", () => {
             ...github.getOctokit().repos,
             ...mockAnswer([
               {
-                key: `data/values/${new Date().getFullYear()}/key-a.json`,
+                key: `data/values/2020/key-a.json`,
                 content: null,
               },
             ]),
@@ -183,7 +183,7 @@ describe("General", () => {
             ...github.getOctokit().repos,
             ...mockAnswer([
               {
-                key: `data/releases/${new Date().getFullYear()}/releases.json`,
+                key: `data/releases/2020/releases.json`,
                 content: null,
               },
             ]),
@@ -198,7 +198,7 @@ describe("General", () => {
     // then
     expect(coreMock.setFailed.mock.calls.length).toBe(0);
     expect(coreMock.info.mock.calls).toContainEqual([
-      `Creating year ${new Date().getFullYear()} for new release`,
+      `Creating year 2020 for new release`,
     ]);
     expect(coreMock.info.mock.calls).toContainEqual(["Saved release rel-a"]);
   });
@@ -213,7 +213,7 @@ describe("General", () => {
             ...github.getOctokit().repos,
             ...mockAnswer([
               {
-                key: `data/releases/${new Date().getFullYear()}/releases.json`,
+                key: `data/releases/2020/releases.json`,
                 content: JSON.stringify({
                   year: new Date().getFullYear(),
                   releases: [
