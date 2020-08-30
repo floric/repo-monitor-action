@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.prod.json",
     "release": "npx standard-version",
-    "commit": "git add . && npx git-cz --disable-emoji",
+    "commit": "git add . && npx git-cz --disable-emoji -S",
     "test": "jest"
   },
   "jest": {
