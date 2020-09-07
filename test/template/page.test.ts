@@ -22,6 +22,7 @@ describe("Report", () => {
   beforeEach(() => {
     jest.resetModules();
     jest.resetAllMocks();
+    jest.setTimeout(10000);
   });
 
   it("Renders correctly", async () => {
