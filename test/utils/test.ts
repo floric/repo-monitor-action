@@ -2,7 +2,7 @@ import { generateImage } from "jsdom-screenshot";
 import { ReleaseYear, MetricsContext } from "../../src/model";
 
 const snapshotOpts = {
-  failureThreshold: 0.0015,
+  failureThreshold: 0.005,
   failureThresholdType: "percent",
 };
 
