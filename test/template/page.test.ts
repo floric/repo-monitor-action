@@ -25,6 +25,21 @@ describe("Report", () => {
     jest.setTimeout(10000);
   });
 
+  it("Renders first time correctly", async () => {
+    // given
+    prepareMocks(core, github);
+    const year: ReleaseYear = {
+      releases: [],
+      year: 2020,
+    };
+
+    // when
+    await writePageIntoDom(year, context);
+
+    // then
+    await assertSnapshot({ width: 1024, height: 1024 });
+  });
+
   it("Renders correctly", async () => {
     // given
     prepareMocks(core, {
