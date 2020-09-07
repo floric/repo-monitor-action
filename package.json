@@ -56,7 +56,7 @@
     "@types/jest": "^26.0.13",
     "@types/js-yaml": "^3.12.5",
     "@types/react": "^16.9.49",
-    "@types/react-vis": "^1.11.2",
+    "@types/react-vis": "^1.11.3",
     "jest": "^26.4.2",
     "jest-image-snapshot": "^4.1.0",
     "jsdom-screenshot": "^3.2.0",

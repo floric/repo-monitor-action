@@ -768,10 +768,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-vis@^1.11.2":
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/@types/react-vis/-/react-vis-1.11.2.tgz#4239a100bbec8e78c0e8ebe94060df7875ae042f"
-  integrity sha512-fKM53Xb0nEdq9w0iaOAk6LNWvOzw3PuqM/AiuBRwKkWHNlLqosYJaYm3gw379P6Iq9gu1Po2pbnDWRKmUe2P7g==
+"@types/react-vis@^1.11.3":
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/@types/react-vis/-/react-vis-1.11.3.tgz#b5e4a4b914290fc746724929cb499e2f4d85e937"
+  integrity sha512-2fbSqnKVaACu0T9o8TrluxuZvVOdyzaqJjDJm5DCrCfPr3eRAqK4LLIddW3NlLiHUW4O/6dI0TbeEOWyZ9QmgA==
   dependencies:
     "@types/react" "*"
 
