@@ -4,3 +4,5 @@ import * as expect from "expect";
 import { toMatchImageSnapshot } from "jest-image-snapshot";
 
 expect.extend({ toMatchImageSnapshot });
+
+process.env.DEPS_DIR = ".";
