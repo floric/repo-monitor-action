@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/floric/repo-monitor-action/compare/v1.8.0...v1.8.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* Integrated snapshot testing into full page generation ([3c334dc](https://github.com/floric/repo-monitor-action/commit/3c334dc06162d3dfa7cc9f436a963a1738302e5d))
+
 ## [1.8.0](https://github.com/floric/repo-monitor-action/compare/v1.7.14...v1.8.0) (2020-08-25)
 
 
