@@ -1,6 +1,6 @@
 {
   "name": "repo-monitor-action",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "repository": "https://github.com/floric/repo-monitor-action.git",
   "author": "Florian Richter <floririchte@gmail.com>",
   "license": "Apache-2.0",
