@@ -787,10 +787,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-vis@^1.11.3":
-  version "1.11.3"
-  resolved "https://registry.yarnpkg.com/@types/react-vis/-/react-vis-1.11.3.tgz#b5e4a4b914290fc746724929cb499e2f4d85e937"
-  integrity sha512-2fbSqnKVaACu0T9o8TrluxuZvVOdyzaqJjDJm5DCrCfPr3eRAqK4LLIddW3NlLiHUW4O/6dI0TbeEOWyZ9QmgA==
+"@types/react-vis@^1.11.4":
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/@types/react-vis/-/react-vis-1.11.4.tgz#8d9e142d7a45871719fb598502e010775247a0ee"
+  integrity sha512-RO3I0GvMyfzVnQWz8tQ0WmgtaO6APrPtdquhxr2LPTzcfgMNLSYfKVKTb39ykwl5Jb2dKkgPPiiMVHM8SQjy9g==
   dependencies:
     "@types/react" "*"
 
