@@ -51,7 +51,7 @@
     "tailwindcss": "^1.8.13"
   },
   "devDependencies": {
-    "@testing-library/react": "^11.0.4",
+    "@testing-library/react": "^11.1.0",
     "@types/chart.js": "^2.9.25",
     "@types/jest": "^26.0.14",
     "@types/js-yaml": "^3.12.5",
