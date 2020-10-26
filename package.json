@@ -42,7 +42,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@types/react-dom": "^16.9.8",
-    "dayjs": "^1.9.1",
+    "dayjs": "^1.9.4",
     "js-yaml": "^3.14.0",
     "purgecss": "^3.0.0",
     "react": "^16.14.0",
