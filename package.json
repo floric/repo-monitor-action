@@ -46,7 +46,7 @@
     "js-yaml": "^3.14.0",
     "purgecss": "^3.0.0",
     "react": "^16.14.0",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.14.0",
     "react-vis": "^1.11.7",
     "tailwindcss": "^1.9.4"
   },
