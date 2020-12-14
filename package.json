@@ -44,7 +44,7 @@
     "@types/react-dom": "^16.9.9",
     "dayjs": "^1.9.7",
     "js-yaml": "^3.14.0",
-    "purgecss": "^3.0.0",
+    "purgecss": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-vis": "^1.11.7",
